@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ClientManagement.Core</RootNamespace>
     <AssemblyName>ClientManagement.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,8 +40,13 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Scaffolding.EntityFramework.12.0, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=x86" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -52,14 +58,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\Db\EmployeeManagementContext.cs" />
+    <Compile Include="Data\Db\DbManagementContext.cs" />
+    <Compile Include="Data\Db\ManagementContext.cs" />
     <Compile Include="Data\Db\Mappings\ClientMap.cs" />
     <Compile Include="Data\Db\Mappings\EmployeeMap.cs" />
     <Compile Include="Data\Db\Mappings\ProjectMap.cs" />
-    <Compile Include="Data\Db\ClientManagementContext.cs" />
-    <Compile Include="Data\Db\ProjectManagementContext.cs" />
     <Compile Include="Data\Repositories\ClientRepository.cs" />
     <Compile Include="Data\Repositories\EmployeeRepository.cs" />
+    <Compile Include="Data\Repositories\FileSystemRepository.cs" />
     <Compile Include="Data\Repositories\IClientRepository.cs" />
     <Compile Include="Data\Repositories\IEmployeeRepository.cs" />
     <Compile Include="Data\Repositories\IProjectRepository.cs" />

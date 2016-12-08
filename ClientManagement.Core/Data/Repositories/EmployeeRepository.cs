@@ -2,22 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ClientManagement.Core.Models;
 using System.Data.Entity;
 
 namespace ClientManagement.Core.Data.Repositories
 {
-    public class EmployeeRepository: IEmployeeRepository
+    public class EmployeeRepository: IEmployeeRepository, IDisposable
     {
-        private readonly EmployeeManagementContext _context;
+        private readonly DbManagementContext _context;
         private readonly bool _externalContext;
         public EmployeeRepository()
         {
-            _context = new EmployeeManagementContext();
+            _context = new DbManagementContext();
         }
-        public EmployeeRepository(EmployeeManagementContext context)
+        public EmployeeRepository(DbManagementContext context)
         {
             _context = context;
             _externalContext = true;
@@ -29,6 +27,15 @@ namespace ClientManagement.Core.Data.Repositories
             _context.SaveChanges();
         }
 
+        public void Dispose()
+        {
+            if (_externalContext || _context == null)
+                return;
+
+            _context.Dispose();
+            GC.SuppressFinalize(this);
+        }
+
         public List<Employee> GetAllEmployees()
         {
             return _context.Employees.ToList();
@@ -38,6 +45,13 @@ namespace ClientManagement.Core.Data.Repositories
         {
             return _context.Employees.Find(id);
         }
+
+        public List<Project> GetProjectListForEmployee(Guid id)
+        {
+            return _context.Projects.Where(x => x.Employees.Equals(id)).ToList();
+        }
+
+
 
         public void Update(Employee employee)
         {

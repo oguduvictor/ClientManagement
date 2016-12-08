@@ -10,8 +10,8 @@ namespace ClientManagement.Core.Data.Db.Mappings
 
             ToTable("Clients");
             HasKey(x => x.Id);
-            modelBuilder.Entity<Client>()
-                .HasMany(e => e.Projects)
+
+            this.HasMany(e => e.Projects)
                 .WithRequired(e => e.Client)
                 .WillCascadeOnDelete(false);
         }

@@ -1,11 +1,17 @@
-﻿namespace ClientManagement.Core.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ClientManagement.Core.Models
 {
     public enum ProjectStatus
     {
-        None = 0,
+        Undisclosed = 0,
         NotStarted = 1,
-        InProgress =2,
+        InProgress = 2,
         Completed = 3,
-        Stopped = 4
+        Cancelled = 4
     }
 }

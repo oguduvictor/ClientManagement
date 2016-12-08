@@ -4,25 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ClientManagement.Core.Models;
-using ClientManagement.Data.Db;
 using System.Data.Entity;
+using ClientManagement.Core.Data.Db;
 
 namespace ClientManagement.Core.Data.Repositories
 {
     public class ClientRepository : IClientRepository
     {
-        private readonly ClientManagementContext _context;
+        private readonly DbManagementContext _context;
         private readonly bool _externalContext;
         public ClientRepository()
         {
-            _context = new ClientManagementContext();
+            _context = new DbManagementContext();
         }
-        public ClientRepository(ClientManagementContext context)
+        public ClientRepository(DbManagementContext context)
         {
             _context = context;
             _externalContext = true;
         }
-
+         
         public void Create(Client client)
         {
             _context.Clients.Add(client);

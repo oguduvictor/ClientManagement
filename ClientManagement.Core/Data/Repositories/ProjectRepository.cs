@@ -11,17 +11,18 @@ namespace ClientManagement.Core.Data.Repositories
 {
     public class ProjectRepository : IProjectRepository
     {
-        private readonly ProjectManagementContext _context;
+        private readonly DbManagementContext _context;
         private readonly bool _externalContext;
         public ProjectRepository()
         {
-            _context = new ProjectManagementContext();
+            _context = new DbManagementContext();
         }
-        public ProjectRepository(ProjectManagementContext context)
+       public ProjectRepository(DbManagementContext context)
         {
             _context = context;
             _externalContext = true;
         }
+       
         public void Create(Project project)
         {
             _context.Projects.Add(project);

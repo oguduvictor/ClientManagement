@@ -7,14 +7,15 @@ namespace ClientManagement.Core.Data.Db.Mappings
     {
         public EmployeeMap()
         {
-            ToTable("Employee");
+            ToTable("Employees");
             HasKey(x => x.Id);
             
             Property(x => x.Gender).HasColumnName("GenderId");
-            
-            modelBuilder.Entity<Employee>()
-                .Property(e => e.Salary)
-                .HasPrecision(19, 2);
+
+            Property(e => e.Salary).HasColumnName("Salary").HasPrecision(19, 2);
+
+            HasMany(e => e.Projects).WithMany(e => e.Employees)
+            .Map(m => m.ToTable("EmployeeProject").MapLeftKey("EmployeeId").MapRightKey("ProjectId"));
         }
     }
 }

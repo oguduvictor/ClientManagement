@@ -7,12 +7,13 @@ namespace ClientManagement.Core.Data.Db.Mappings
     {
         public ClientMap()
         {
-
-            ToTable("Clients");
+            ToTable("Client");
             HasKey(x => x.Id);
-
-            this.HasMany(e => e.Projects)
-                .WithRequired(e => e.Client)
+            
+            Property(x => x.Name).HasColumnName("ClientName");
+            Property(x => x.EmailAddress).HasColumnName("ClientEmailAddress");
+            HasMany(e => e.Projects)
+                .WithRequired(e => e.Client).HasForeignKey(x => x.ClientId)
                 .WillCascadeOnDelete(false);
         }
     }

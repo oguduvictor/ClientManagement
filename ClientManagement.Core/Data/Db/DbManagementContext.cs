@@ -17,6 +17,7 @@ namespace ClientManagement.Core.Data.Db
         {
 
         }
+
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<Client> Clients { get; set; }

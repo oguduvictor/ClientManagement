@@ -41,14 +41,14 @@ namespace ClientManagement.Core.Data.Repositories
             return _context.Employees.ToList();
         }
 
-        public Employee GetEmployee(Guid id)
+        public Employee GetEmployee(int id)
         {
             return _context.Employees.Find(id);
         }
 
-        public List<Project> GetProjectListForEmployee(Guid id)
+        public List<Project> GetProjectListForEmployee(int EmployeeId)
         {
-            return _context.Projects.Where(x => x.Employees.Equals(id)).ToList();
+            return _context.Employees.Find(EmployeeId).Projects.ToList();
         }
 
 

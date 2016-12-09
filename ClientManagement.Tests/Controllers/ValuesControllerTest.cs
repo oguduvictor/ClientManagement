@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ClientManagement.Web;
 using ClientManagement.Web.Controllers;
 
-namespace ClientManagement.Web.Tests.Controllers
+namespace ClientManagement.Tests.Controllers
 {
     [TestClass]
     public class ValuesControllerTest

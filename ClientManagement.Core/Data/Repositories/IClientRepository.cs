@@ -6,7 +6,7 @@ namespace ClientManagement.Core.Data.Repositories
 {
     public interface IClientRepository
     {
-        Client GetClient(Guid id);
+        Client GetClient(int id);
 
         List<Client> GetAllClients();
 

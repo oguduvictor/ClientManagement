@@ -9,7 +9,7 @@ using ClientManagement.Core.Data.Db;
 
 namespace ClientManagement.Core.Data.Repositories
 {
-    public class ClientRepository : IClientRepository
+    public class ClientRepository : IClientRepository, IDisposable
     {
         private readonly DbManagementContext _context;
         private readonly bool _externalContext;
@@ -29,12 +29,17 @@ namespace ClientManagement.Core.Data.Repositories
             _context.SaveChanges();
         }
 
+        public List<Project> GetClientProjectList(int ClientId)
+        {
+            return _context.Clients.Find(ClientId).Projects.ToList();
+        }
+
         public List<Client> GetAllClients()
         {
             return _context.Clients.ToList();
         }
 
-        public Client GetClient(Guid id)
+        public Client GetClient(int id)
         {
             return _context.Clients.Find(id);
         }
@@ -47,6 +52,14 @@ namespace ClientManagement.Core.Data.Repositories
                 _context.Entry(client).State = EntityState.Modified;
             }
             _context.SaveChanges();
+        }
+        public void Dispose()
+        {
+            if (_externalContext || _context == null)
+                return;
+
+            _context.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

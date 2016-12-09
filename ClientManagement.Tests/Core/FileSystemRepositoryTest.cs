@@ -21,7 +21,7 @@ namespace ClientManagement.Tests.Core
             File.WriteAllText(_filepath, JsonConvert.SerializeObject(employees, Formatting.Indented));
         }
 
-        //[ClassCleanup]
+        [ClassCleanup]
         public static void Cleanup()
         {
             File.WriteAllText(_filepath, string.Empty);
@@ -56,9 +56,9 @@ namespace ClientManagement.Tests.Core
             var repo = new FileSystemRepository();
             var employees = repo.GetAllEmployees();
 
-            //Assert.AreEqual(1, employees.Count);
-            //Assert.AreEqual(Data.User1Id, employees.First().Id);
-            //Assert.AreEqual(Data.User2Id, employees[1].Id);
+            Assert.AreEqual(3, employees.Count);
+            Assert.AreEqual(1, employees.First().Id);
+            Assert.AreEqual(0, employees[1].Id);
 
         }
 

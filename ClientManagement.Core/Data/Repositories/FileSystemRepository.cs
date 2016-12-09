@@ -22,8 +22,7 @@ namespace ClientManagement.Core.Data.Repositories
         public void Create(Employee employee)
         {
             var employees = GetAllEmployees();
-
-            employee.Id = Guid.NewGuid();
+            
             employees.Add(employee);
             PersistEmployees();
         }
@@ -52,7 +51,7 @@ namespace ClientManagement.Core.Data.Repositories
             return _employees;
         }
 
-        public Employee GetEmployee(Guid id)
+        public Employee GetEmployee(int id)
         {
             var employees = GetAllEmployees();
             var employee = employees.FirstOrDefault(x => x.Id == x.Id);

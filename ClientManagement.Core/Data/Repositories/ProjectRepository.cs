@@ -9,7 +9,7 @@ using System.Data.Entity;
 
 namespace ClientManagement.Core.Data.Repositories
 {
-    public class ProjectRepository : IProjectRepository
+    public class ProjectRepository : IProjectRepository, IDisposable
     {
         private readonly DbManagementContext _context;
         private readonly bool _externalContext;
@@ -43,6 +43,20 @@ namespace ClientManagement.Core.Data.Repositories
             }
 
             _context.SaveChanges();
+        }
+
+        public List<Employee> GetEmployeeListForProject(int ProjectId)
+        {
+            return _context.Projects.Find(ProjectId).Employees.ToList();
+        }
+
+        public void Dispose()
+        {
+            if (_externalContext || _context == null)
+                return;
+
+            _context.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

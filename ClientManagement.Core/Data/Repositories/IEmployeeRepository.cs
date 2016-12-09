@@ -6,7 +6,7 @@ namespace ClientManagement.Core.Data.Repositories
 {
     public interface IEmployeeRepository
     {
-        Employee GetEmployee(Guid id);
+        Employee GetEmployee(int id);
 
         List<Employee> GetAllEmployees();
 

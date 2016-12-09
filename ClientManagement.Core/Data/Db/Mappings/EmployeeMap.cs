@@ -10,12 +10,11 @@ namespace ClientManagement.Core.Data.Db.Mappings
             ToTable("Employees");
             HasKey(x => x.Id);
             
-            Property(x => x.Gender).HasColumnName("GenderId");
+            Property(x => x.Salary).HasColumnName("Salary").HasPrecision(19, 2);
 
-            Property(e => e.Salary).HasColumnName("Salary").HasPrecision(19, 2);
-
-            HasMany(e => e.Projects).WithMany(e => e.Employees)
-            .Map(m => m.ToTable("EmployeeProject").MapLeftKey("EmployeeId").MapRightKey("ProjectId"));
+            HasMany(x => x.Projects)
+                .WithMany(x => x.Employees)
+                .Map(m => m.ToTable("EmployeeProject").MapLeftKey("EmployeeId").MapRightKey("ProjectId"));
         }
     }
 }

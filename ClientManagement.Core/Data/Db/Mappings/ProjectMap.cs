@@ -9,15 +9,13 @@ namespace ClientManagement.Core.Data.Db.Mappings
         {
             ToTable("Project");
             HasKey(x => x.Id);
-
-            Property(x => x.Description).HasColumnName("Description");
-
-            Property(x => x.ProjectStatus).HasColumnName("ProjectStatusId");
-            Property(x => x.ClientId).HasColumnName("ClientId");
-
-            this.HasMany(e => e.Employees)
+            
+            
+            Property(x => x.Title).HasColumnName("ProjectTitle");
+            Property(x => x.Description).HasColumnName("ProjectDescription");
+            HasMany(e => e.Employees)
                 .WithMany(e => e.Projects)
-                .Map(m => m.ToTable("EmployeeProject").MapLeftKey("ProjectId").MapRightKey("EmployeeId"));
+                .Map(m => m.ToTable("EmployeeProject").MapLeftKey("EmployeeId").MapRightKey("ProjectId"));
         }
     }
 }

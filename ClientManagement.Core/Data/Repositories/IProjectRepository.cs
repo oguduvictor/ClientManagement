@@ -6,7 +6,8 @@ namespace ClientManagement.Core.Data.Repositories
     public interface IProjectRepository
     {
         void Create(Project project);
-        void Update(Project project);
+        Project GetProject(int id);
         List<Project> GetAllProjects();
+        void Update(Project project);
     }
 }

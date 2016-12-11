@@ -1,23 +1,22 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ClientManagement.Core.Data.Repositories;
-using ClientManagement.Core.Data.Db;
-using ClientManagement.Core.Models;
 using System.Data.Entity;
+using ClientManagement.Core.Data.Db;
 
 namespace ClientManagement.Tests.Core
 {
     [TestClass]
-    public class EmployeeRepositoryTest
+    public class ProjectRepositoryTest
     {
         private DbManagementContext context;
-        private EmployeeRepository repo;
+        private ProjectRepository repo;
         private DbContextTransaction txn;
 
         [TestInitialize]
         public void BeforeEach()
         {
             context = new DbManagementContext();
-            repo = new EmployeeRepository(context);
+            repo = new ProjectRepository(context);
             txn = context.Database.BeginTransaction();
         }
 
@@ -27,30 +26,31 @@ namespace ClientManagement.Tests.Core
             txn.Rollback();
             txn.Dispose();
         }
-
         [TestMethod, TestCategory("Integration Test")]
-        public void Should_Be_Able_To_Add_Employee_To_DB()
+        public void Should_Be_Able_To_Add_Project_To_DB()
         {
-            repo.Create(Data.Employees[0]);
+            repo.Create(Data.project[0]);
             context.SaveChanges();
-        }
-        
-        [TestMethod, TestCategory("Integration Test")]
-        public void Should_Be_Able_To_Get_List_Of_All_Employees_From_Db()
-        {
-            context.Set<Employee>().AddRange(Data.Employees);
-            context.SaveChanges();
-            var employees = repo.GetAllEmployees();
-            Assert.AreEqual(3, employees.Count);
         }
 
         [TestMethod, TestCategory("Integration Test")]
-        public void Should_Be_Able_To_Get_An_Employee_From_Db()
+        public void Should_Be_Able_To_Get_All_Projects_From_DB()
         {
-            context.Set<Employee>().AddRange(Data.Employees);
+            context.Projects.AddRange(Data.project);
             context.SaveChanges();
-            var employee = repo.GetEmployee(31);
-            Assert.IsNotNull(employee);
+            var projects = repo.GetAllProjects();
+
+            Assert.AreEqual(2, projects.Count);
+        }
+
+        [TestMethod, TestCategory("Integration Test")]
+        public void Should_Be_Able_To_Get_A_Project_From_DB()
+        {
+            context.Projects.AddRange(Data.project);
+            context.SaveChanges();
+            var project = repo.GetProject(12);
+
+            Assert.IsNotNull(project);
         }
     }
 }

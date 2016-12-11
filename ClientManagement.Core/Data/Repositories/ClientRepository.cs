@@ -22,35 +22,44 @@ namespace ClientManagement.Core.Data.Repositories
             _context = context;
             _externalContext = true;
         }
-         
         public void Create(Client client)
         {
             _context.Clients.Add(client);
             _context.SaveChanges();
         }
-
-        public List<Project> GetClientProjectList(int ClientId)
-        {
-            return _context.Clients.Find(ClientId).Projects.ToList();
-        }
-
         public List<Client> GetAllClients()
         {
             return _context.Clients.ToList();
         }
-
-        public Client GetClient(int id)
+        public Client GetClient(int clientId)
         {
-            return _context.Clients.Find(id);
+            return _context.Clients.Find(clientId);
         }
-
         public void Update(Client client)
         {
-            if(!_context.Clients.Local.Contains(client))
+            var dbClient = GetClient(client.Id);
+
+            dbClient.Name = client.Name;
+            dbClient.EmailAddress = client.EmailAddress;
+            
+            foreach (var project in client.Projects)
             {
-                _context.Clients.Attach(client);
-                _context.Entry(client).State = EntityState.Modified;
+                if (project.Id == 0)
+                {
+                    dbClient.Projects.Add(project);
+                    continue;
+                }
+
+                var dbProject = dbClient.Projects.FirstOrDefault(x => x.Id == project.Id);
+
+                if (dbProject != null)
+                {
+                    dbProject.Title = project.Title;
+                    dbProject.Description = project.Description;
+                    dbProject.ProjectStatus = project.ProjectStatus;
+                }
             }
+            
             _context.SaveChanges();
         }
         public void Dispose()

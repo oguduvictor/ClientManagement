@@ -1,5 +1,4 @@
-﻿using ClientManagement.Core.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System.Configuration;
 using System.IO;
@@ -27,7 +26,7 @@ namespace ClientManagement.Tests.Core
             File.WriteAllText(_filepath, string.Empty);
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("Integration Test")]
         public void Should_Be_Able_To_Create_FileSystemRepository_Instance()
         {
             var repo = new FileSystemRepository();
@@ -35,33 +34,22 @@ namespace ClientManagement.Tests.Core
             Assert.IsNotNull(repo);
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("Integration Test")]
         public void Should_Be_Able_To_Save_Employee()
         {
             var repo = new FileSystemRepository();
-            var employee = new Employee();
-
-            employee.FirstName = "Ngozi";
-            employee.LastName = "Adekola";
-            employee.Salary = 100000.50M;
-            employee.SkillLevel = 5;
-            employee.Gender = Gender.Female;
-            repo.Create(Data.Employees[0]);
             repo.Create(Data.Employees[1]);
         }
 
-        [TestMethod]
+        [TestMethod, TestCategory("Integration Test")]
         public void Should_Be_Able_To_Read_All_Employees()
         {
             var repo = new FileSystemRepository();
             var employees = repo.GetAllEmployees();
 
             Assert.AreEqual(3, employees.Count);
-            Assert.AreEqual(1, employees.First().Id);
-            Assert.AreEqual(0, employees[1].Id);
-
+            Assert.AreEqual(30, employees.First().Id);
+            Assert.AreEqual(31, employees[1].Id);
         }
-
-        
     }
 }

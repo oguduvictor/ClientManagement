@@ -1,15 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ClientManagement.Core.Models;
 
-namespace ClientManagement.Core.Tests
+namespace ClientManagement.Tests.Core
 {
     [TestClass]
-    public class EmployeeTests
+    public class ProjectTest
     {
         [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Create_Employee_Instance()
+        public void Should_Be_Able_To_Create_Project_Instance()
         {
-            var employee = new Employee();
+            var project = new Project();
         }
     }
 }

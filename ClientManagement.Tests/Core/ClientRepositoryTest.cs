@@ -1,26 +1,25 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ClientManagement.Core.Data.Repositories;
 using ClientManagement.Core.Data.Db;
+using ClientManagement.Core.Data.Repositories;
 using ClientManagement.Core.Models;
 using System.Data.Entity;
 
 namespace ClientManagement.Tests.Core
 {
     [TestClass]
-    public class EmployeeRepositoryTest
+    public class ClientRepositoryTest
     {
         private DbManagementContext context;
-        private EmployeeRepository repo;
+        private ClientRepository repo;
         private DbContextTransaction txn;
 
         [TestInitialize]
         public void BeforeEach()
         {
             context = new DbManagementContext();
-            repo = new EmployeeRepository(context);
+            repo = new ClientRepository(context);
             txn = context.Database.BeginTransaction();
         }
-
         [TestCleanup]
         public void AfterEach()
         {
@@ -29,28 +28,30 @@ namespace ClientManagement.Tests.Core
         }
 
         [TestMethod, TestCategory("Integration Test")]
-        public void Should_Be_Able_To_Add_Employee_To_DB()
+        public void Should_Be_Able_To_Add_Client_And_Save_To_Db()
         {
-            repo.Create(Data.Employees[0]);
+            repo.Create(Data.client[0]);
             context.SaveChanges();
-        }
-        
-        [TestMethod, TestCategory("Integration Test")]
-        public void Should_Be_Able_To_Get_List_Of_All_Employees_From_Db()
-        {
-            context.Set<Employee>().AddRange(Data.Employees);
-            context.SaveChanges();
-            var employees = repo.GetAllEmployees();
-            Assert.AreEqual(3, employees.Count);
         }
 
         [TestMethod, TestCategory("Integration Test")]
-        public void Should_Be_Able_To_Get_An_Employee_From_Db()
+        public void Should_Be_Able_To_Get_All_Clients()
         {
-            context.Set<Employee>().AddRange(Data.Employees);
+            context.Set<Client>().AddRange(Data.client);
             context.SaveChanges();
-            var employee = repo.GetEmployee(31);
-            Assert.IsNotNull(employee);
+            var clients = repo.GetAllClients();
+
+            Assert.AreEqual(1, clients.Count);
+        }
+
+        [TestMethod, TestCategory("Integration Test")]
+        public void Should_Be_Able_To_Get_A_Client()
+        {
+            context.Set<Client>().AddRange(Data.client);
+            context.SaveChanges();
+            var client = repo.GetClient(1);
+
+            Assert.IsNotNull(client);
         }
     }
 }

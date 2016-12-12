@@ -13,7 +13,7 @@ namespace ClientManagement.Core.Data.Db
     {
         
         public DbManagementContext()
-            : base("name=ClientsManagementDB")
+            : base("name=DefaultConnection")
         {
 
         }

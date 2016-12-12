@@ -13,8 +13,11 @@ namespace ClientManagement.Tests.Core
                 {
                    new Project { Id = 12, Title = "Client Management", Description = "Client management software for consulting firm",
                    ProjectStatus = ProjectStatus.NotStarted},
+                   new Project { Id = 11, Title = "Health Tutor", Description = "Software for health-related issues",
+                   ProjectStatus = ProjectStatus.InProgress},
                    new Project { Id = 10, Title = "Accounting Software", Description = "Accounting management software for consulting firm",
-                   ProjectStatus = ProjectStatus.InProgress}
+                   ProjectStatus = ProjectStatus.InProgress, Employees = new List<Employee> { Employees[0], Employees[2] }
+                       }
                 };
             }
         }
@@ -32,7 +35,7 @@ namespace ClientManagement.Tests.Core
                 };
             }
         }
-        public static List<Client> client
+        public static List<Client> clients
         {
             get
             {
@@ -58,7 +61,8 @@ namespace ClientManagement.Tests.Core
                     new Employee { Id = 31, FirstName = "Banke", LastName = "Bola", Gender = Gender.Female, Salary = 349400, SkillLevel = 2,
                         Projects = new List<Project> { project[0], project[1] },
                     },
-                    new Employee { Id = 20, FirstName = "Bello", LastName = "Bimbo", Gender = Gender.Male, Salary = 524900, SkillLevel = 5}
+                    new Employee { Id = 20, FirstName = "Bello", LastName = "Bimbo", Gender = Gender.Male, Salary = 524900, SkillLevel = 5,
+                        Projects = new List<Project>() }
                 };
             }
         }

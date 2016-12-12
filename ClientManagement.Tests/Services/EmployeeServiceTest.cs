@@ -5,6 +5,8 @@ using Moq;
 using ClientManagement.Tests.Core;
 using System.Linq;
 using ClientManagement.Core.Services;
+using ClientManagement.Core.Models;
+using System.Collections.Generic;
 
 namespace ClientManagement.Tests.Services
 {
@@ -12,6 +14,7 @@ namespace ClientManagement.Tests.Services
     public class EmployeeServiceTest
     {
         private Mock<IEmployeeRepository> _employeeRepoMock;
+        private EmployeeService _employeeService;
 
         [TestInitialize]
         public void BeforeEach()
@@ -24,26 +27,51 @@ namespace ClientManagement.Tests.Services
                 .Setup(x => x.GetEmployee(It.IsAny<int>()))
                 .Returns((int input) =>
                 {
-                    return employees.FirstOrDefault(y => y.Id == input);
+                    return employees.FirstOrDefault(x => x.Id == input);
                 });
+            _employeeRepoMock.Setup(x => x.Create(It.IsAny<Employee>()));
+            _employeeRepoMock.Setup(x => x.Update(It.IsAny<Employee>()));
+            _employeeService = new EmployeeService(_employeeRepoMock.Object);
         }
-
-        [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Create_EmployeeService_Instance()
-        {
-            var employeeService = new EmployeeService(_employeeRepoMock.Object);
-
-            Assert.IsNotNull(employeeService);
-        }
-
+        
         [TestMethod, TestCategory("Unit Test")]
         public void Should_Be_Able_To_Retrieve_An_Employee()
         {
-            var employeeService = new EmployeeService(_employeeRepoMock.Object);
-            var employee = employeeService.GetEmployee(Data.Employees[0].Id);
+            var employee = _employeeService.GetEmployee(Data.Employees[0].Id);
 
             Assert.IsNotNull(employee);
             Assert.AreEqual("James", employee.FirstName);
+        }
+
+        [TestMethod, TestCategory("Unit Test")]
+        public void Should_Be_Able_To_Retrieve_All_Employees()
+        {
+            var employees = _employeeService.GetAllEmployees();
+
+            Assert.AreEqual(3, employees.Count);
+        }
+
+        [TestMethod, TestCategory("Unit Test")]
+        public void Should_Be_Able_To_Retrieve_All_Projects_For_An_Employee()
+        {
+            var projects = _employeeService.GetProjectListForEmployee(Data.Employees[1].Id);
+
+            Assert.AreEqual(2, projects.Count);
+        }
+
+        [TestMethod, TestCategory("Unit Test")]
+        public void Should_Be_Able_To_Assign_Project_To_Employee()
+        {
+            var project = Data.projects[0];
+            var employeeId = Data.Employees[2].Id;
+            _employeeService.AssignProjectToEmployee(employeeId, project);
+        }
+
+        [TestMethod, TestCategory("Unit Test")]
+        public void Should_Be_Able_To_Save_Employee()
+        {
+            var employee = Data.Employees[0];
+            _employeeService.Save(employee);
         }
     }
 }

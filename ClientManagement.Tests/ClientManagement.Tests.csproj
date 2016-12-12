@@ -123,6 +123,7 @@
     <Compile Include="Core\EmployeeTest.cs" />
     <Compile Include="Services\ClientServiceTest.cs" />
     <Compile Include="Services\EmployeeServiceTest.cs" />
+    <Compile Include="Services\ProjectServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config">

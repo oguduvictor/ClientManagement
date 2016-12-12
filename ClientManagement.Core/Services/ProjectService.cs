@@ -33,6 +33,5 @@ namespace ClientManagement.Core.Services
             else
                 _projectRepository.Update(project);
         }
-
     }
 }

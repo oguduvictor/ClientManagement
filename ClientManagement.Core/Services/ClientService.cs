@@ -30,13 +30,11 @@ namespace ClientManagement.Core.Services
             else
                 _clientRepository.Update(client);
         }
-
         public void AddProject(Project project, int clientId)
         {
             var client = GetClient(clientId);
             client.Projects.Add(project);
         }
-
         public List<Project> GetClientProjects(int ClientId)
         {
             var client = GetClient(ClientId);

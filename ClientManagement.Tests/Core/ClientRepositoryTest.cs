@@ -30,14 +30,14 @@ namespace ClientManagement.Tests.Core
         [TestMethod, TestCategory("Integration Test")]
         public void Should_Be_Able_To_Add_Client_And_Save_To_Db()
         {
-            repo.Create(Data.client[0]);
+            repo.Create(Data.clients[0]);
             context.SaveChanges();
         }
 
         [TestMethod, TestCategory("Integration Test")]
         public void Should_Be_Able_To_Get_All_Clients()
         {
-            context.Set<Client>().AddRange(Data.client);
+            context.Set<Client>().AddRange(Data.clients);
             context.SaveChanges();
             var clients = repo.GetAllClients();
 
@@ -47,7 +47,7 @@ namespace ClientManagement.Tests.Core
         [TestMethod, TestCategory("Integration Test")]
         public void Should_Be_Able_To_Get_A_Client()
         {
-            context.Set<Client>().AddRange(Data.client);
+            context.Set<Client>().AddRange(Data.clients);
             context.SaveChanges();
             var client = repo.GetClient(1);
 

@@ -9,5 +9,6 @@ namespace ClientManagement.Core.Services
         List<Project> GetAllProjects();
         List<Employee> GetEmployeeListForProject(int ProjectId);
         void Save(Project project);
+        void Delete(int id);
     }
 }

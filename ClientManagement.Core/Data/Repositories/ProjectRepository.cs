@@ -43,7 +43,14 @@ namespace ClientManagement.Core.Data.Repositories
             dbProject.ProjectStatus = project.ProjectStatus;
 
             _context.SaveChanges();
+        }
 
+        public void Delete(int id)
+        {
+            var project = _context.Projects.Find(id);
+            _context.Projects.Remove(project);
+            _context.Entry(project).State = EntityState.Deleted;
+            _context.SaveChanges();
         }
         public void Dispose()
         {

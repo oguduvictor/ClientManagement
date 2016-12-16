@@ -42,27 +42,52 @@ namespace ClientManagement.Core.Data.Repositories
             dbEmployee.Gender = employee.Gender;
             dbEmployee.Salary = employee.Salary;
             dbEmployee.SkillLevel = employee.SkillLevel;
-
-            foreach (var project in employee.Projects)
-            {
-                if (project.Id == 0)
+            //if (employee.Projects != null)
+            //{
+                foreach (var project in employee.Projects)
                 {
-                    dbEmployee.Projects.Add(project);
-                    continue;
-                }
+                    if (project.Id == 0)
+                    {
+                        dbEmployee.Projects.Add(project);
+                        continue;
+                    }
 
-                var dbProject = dbEmployee.Projects.FirstOrDefault(x => x.Id == project.Id);
+                    var dbProject = dbEmployee.Projects.FirstOrDefault(x => x.Id == project.Id);
 
-                if (dbProject != null)
-                {
-                    dbProject.Title = project.Title;
-                    dbProject.Description = project.Description;
-                    dbProject.ProjectStatus = project.ProjectStatus;
-                    dbProject.ClientId = dbProject.ClientId;
+                    if (dbProject != null)
+                    {
+                        dbProject.Title = project.Title;
+                        dbProject.Description = project.Description;
+                        dbProject.ProjectStatus = project.ProjectStatus;
+                        dbProject.ClientId = dbProject.ClientId;
+                    }
                 }
-            }
+            //}
             _context.SaveChanges();
         }
+
+        public void AssignProjectToEmployee(int employeeId, int projectId)
+        {
+            var employee = GetEmployee(employeeId);
+            var project = _context.Projects.Find(projectId);
+            employee.Projects.Add(project);
+            _context.SaveChanges();
+        }
+
+        public void RemoveProjectFromEmployee(int employeeId, int projectId)
+        {
+            var employee = GetEmployee(employeeId);
+            var project = employee.Projects.FirstOrDefault(x => x.Id == projectId);
+            employee.Projects.Remove(project);
+            _context.SaveChanges();
+        }
+        public void Delete(int id)
+        {
+            var employee = _context.Employees.Find(id);
+            _context.Employees.Remove(employee);
+            _context.SaveChanges();
+        }
+
         public void Dispose()
         {
             if (_externalContext || _context == null)

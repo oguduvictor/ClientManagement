@@ -18,7 +18,8 @@ namespace ClientManagement.Core.Data.Repositories
         private readonly string FILE_PATH = ConfigurationManager.AppSettings["ClientEmployeeFilePath"];
         private List<Employee> _employees;
         private static ReaderWriterLockSlim _readerWriterLock = new ReaderWriterLockSlim();
-        
+        private List<Project> _projects;
+
         public void Create(Employee employee)
         {
             var employees = GetAllEmployees();
@@ -92,6 +93,45 @@ namespace ClientManagement.Core.Data.Repositories
                 _readerWriterLock.ExitWriteLock();
             }
         }
-        
+
+        public void AssignProjectToEmployee(int employeeId, int projectId)
+        {
+            var Projects = GetAllProjects();
+            var project = Projects.FirstOrDefault(x => x.Id == projectId);
+            var employee = GetEmployee(employeeId);
+
+            employee.Projects.Add(project);
+
+            PersistEmployees();
+        }
+
+        public List<Project> GetAllProjects()
+        {
+            if (_projects != null)
+                return _projects;
+
+            _readerWriterLock.EnterReadLock();
+            var projectjson = default(string);
+
+            try
+            {
+                projectjson = File.ReadAllText(FILE_PATH);
+            }
+            finally
+            {
+                _readerWriterLock.ExitReadLock();
+            }
+
+            _projects = DeserializeObject<List<Project>>(projectjson)
+                ?? new List<Project>();
+
+            return _projects;
+
+        }
+
+        public void Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -9,6 +9,11 @@ namespace ClientManagement.Core.Services
     public class EmployeeService: IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
+
+        public EmployeeService()
+        {
+            _employeeRepository = new EmployeeRepository();
+        }
         public EmployeeService(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
@@ -38,10 +43,30 @@ namespace ClientManagement.Core.Services
             }
             return employee.Projects.ToList();
         }
-        public void AssignProjectToEmployee(int employeeId, Project project)
+        public void AssignProjectToEmployee(int employeeId, int projectId)
+        {
+            _employeeRepository.AssignProjectToEmployee(employeeId, projectId);
+        }
+        public void DeleteEmployee(int id)
+        {
+            _employeeRepository.Delete(id);
+        }
+
+        public void RemoveProjectFromEmployee(int employeeId, int projectId)
         {
             var employee = GetEmployee(employeeId);
-            employee.Projects.Add(project);
+            var project = employee.Projects.FirstOrDefault(x => x.Id == projectId);
+            employee.Projects.Remove(project);
+        }
+        public void ReassignProject(int projectId, int FromEmployeeId, int ToEmployeeId)
+        {
+            AssignProjectToEmployee(ToEmployeeId, projectId);
+            RemoveProjectFromEmployee(FromEmployeeId, projectId);
+        }
+
+        public void Delete(int id)
+        {
+            _employeeRepository.Delete(id);
         }
     }
 }

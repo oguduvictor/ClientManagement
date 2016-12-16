@@ -57,7 +57,8 @@ namespace ClientManagement.Tests.Core
             {
                 return new List<Employee>
                 {
-                    new Employee { Id = 30, FirstName = "James", LastName = "Fox", Gender = Gender.Male, Salary = 200000, SkillLevel = 3 },
+                    new Employee { Id = 30, FirstName = "James", LastName = "Fox", Gender = Gender.Male, Salary = 200000, SkillLevel = 3
+                    , Projects = new List<Project>() { } },
                     new Employee { Id = 31, FirstName = "Banke", LastName = "Bola", Gender = Gender.Female, Salary = 349400, SkillLevel = 2,
                         Projects = new List<Project> { project[0], project[1] },
                     },

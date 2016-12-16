@@ -10,8 +10,7 @@ namespace ClientManagement.Web.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
-
+            ViewBag.Title = "Client Management System";
             return View();
         }
     }

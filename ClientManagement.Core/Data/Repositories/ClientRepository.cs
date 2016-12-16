@@ -62,6 +62,13 @@ namespace ClientManagement.Core.Data.Repositories
             
             _context.SaveChanges();
         }
+
+        public void Delete(int id)
+        {
+            var client = _context.Clients.Find(id);
+            _context.Clients.Remove(client);
+            _context.SaveChanges();
+        }
         public void Dispose()
         {
             if (_externalContext || _context == null)

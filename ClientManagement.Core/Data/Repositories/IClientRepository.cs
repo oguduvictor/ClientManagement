@@ -9,5 +9,6 @@ namespace ClientManagement.Core.Data.Repositories
         Client GetClient(int id);
         List<Client> GetAllClients();
         void Update(Client client);
+        void Delete(int id);
     }
 }

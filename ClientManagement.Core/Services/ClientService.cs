@@ -9,6 +9,10 @@ namespace ClientManagement.Core.Services
     {
         private readonly IClientRepository _clientRepository;
 
+        public ClientService()
+        {
+            _clientRepository = new ClientRepository();
+        }
         public ClientService(IClientRepository clientRepository)
         {
             _clientRepository = clientRepository;
@@ -21,6 +25,10 @@ namespace ClientManagement.Core.Services
         public List<Client> GetAllClients()
         {
             return _clientRepository.GetAllClients();
+        }
+        public void Delete(int id)
+        {
+            _clientRepository.Delete(id);
         }
         public void SaveClient(Client client)
         {

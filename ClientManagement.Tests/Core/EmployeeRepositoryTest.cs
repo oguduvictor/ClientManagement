@@ -32,7 +32,6 @@ namespace ClientManagement.Tests.Core
         public void Should_Be_Able_To_Add_Employee_To_DB()
         {
             repo.Create(Data.Employees[0]);
-            context.SaveChanges();
         }
         
         [TestMethod, TestCategory("Integration Test")]
@@ -51,6 +50,15 @@ namespace ClientManagement.Tests.Core
             context.SaveChanges();
             var employee = repo.GetEmployee(31);
             Assert.IsNotNull(employee);
+        }
+
+        [TestMethod, TestCategory("Integration Test")]
+        public void Should_Be_Able_To_Assign_Project_To_Employee()
+        {
+            repo.Create(Data.Employees[2]);
+            context.Set<Project>().AddRange(Data.project);
+            context.SaveChanges();
+            repo.AssignProjectToEmployee(20, 12);
         }
     }
 }

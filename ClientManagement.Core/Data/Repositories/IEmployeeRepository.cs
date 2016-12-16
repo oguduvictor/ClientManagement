@@ -9,5 +9,7 @@ namespace ClientManagement.Core.Data.Repositories
         Employee GetEmployee(int id);
         List<Employee> GetAllEmployees();
         void Update(Employee employee);
+        void AssignProjectToEmployee(int employeeId, int projectId);
+        void Delete(int id);
     }
 }

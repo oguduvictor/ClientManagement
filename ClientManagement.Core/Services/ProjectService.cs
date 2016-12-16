@@ -2,12 +2,17 @@
 using ClientManagement.Core.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace ClientManagement.Core.Services
 {
     public class ProjectService: IProjectService
     {
         private readonly IProjectRepository _projectRepository;
+        public ProjectService()
+        {
+            _projectRepository = new ProjectRepository();
+        }
         public ProjectService(IProjectRepository projectRepository)
         {
             _projectRepository = projectRepository;
@@ -32,6 +37,11 @@ namespace ClientManagement.Core.Services
                 _projectRepository.Create(project);
             else
                 _projectRepository.Update(project);
+        }
+
+        public void Delete(int id)
+        {
+            _projectRepository.Delete(id);
         }
     }
 }

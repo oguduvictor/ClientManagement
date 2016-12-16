@@ -1,0 +1,165 @@
+﻿<error errorId="1496b4d4-7c62-4d98-b482-6683763ae250" host="VICTOR-PC" type="System.InvalidOperationException" message="The current type, ClientManagement.Core.Data.Repositories.IProjectRepository, is an interface and cannot be constructed. Are you missing a type mapping?" source="Microsoft.Practices.Unity" detail="System.InvalidOperationException: An error occurred when trying to create a controller of type 'ClientManagement.Web.Controllers.ProjectController'. Make sure that the controller has a parameterless public constructor. ---&gt; Microsoft.Practices.Unity.ResolutionFailedException: Resolution of the dependency failed, type = &quot;ClientManagement.Web.Controllers.ProjectController&quot;, name = &quot;(none)&quot;.&#xD;&#xA;Exception occurred while: while resolving.&#xD;&#xA;Exception is: InvalidOperationException - The current type, ClientManagement.Core.Data.Repositories.IProjectRepository, is an interface and cannot be constructed. Are you missing a type mapping?&#xD;&#xA;-----------------------------------------------&#xD;&#xA;At the time of the exception, the container was:&#xD;&#xA;&#xD;&#xA;  Resolving ClientManagement.Web.Controllers.ProjectController,(none)&#xD;&#xA;  Resolving parameter &quot;projectService&quot; of constructor ClientManagement.Web.Controllers.ProjectController(ClientManagement.Core.Services.IProjectService projectService)&#xD;&#xA;    Resolving ClientManagement.Core.Services.ProjectService,(none) (mapped from ClientManagement.Core.Services.IProjectService, (none))&#xD;&#xA;    Resolving parameter &quot;projectRepository&quot; of constructor ClientManagement.Core.Services.ProjectService(ClientManagement.Core.Data.Repositories.IProjectRepository projectRepository)&#xD;&#xA;      Resolving ClientManagement.Core.Data.Repositories.IProjectRepository,(none)&#xD;&#xA; ---&gt; System.InvalidOperationException: The current type, ClientManagement.Core.Data.Repositories.IProjectRepository, is an interface and cannot be constructed. Are you missing a type mapping?&#xD;&#xA;   at Microsoft.Practices.ObjectBuilder2.DynamicMethodConstructorStrategy.ThrowForAttemptingToConstructInterface(IBuilderContext context)&#xD;&#xA;   at lambda_method(Closure , IBuilderContext )&#xD;&#xA;   at Microsoft.Practices.ObjectBuilder2.DynamicBuildPlanGenerationContext.&lt;&gt;c__DisplayClass1.&lt;GetBuildMethod&gt;b__0(IBuilderContext context)&#xD;&#xA;   at Microsoft.Practices.ObjectBuilder2.DynamicMethodBuildPlan.BuildUp(IBuilderContext context)&#xD;&#xA;   at Microsoft.Practices.ObjectBuilder2.BuildPlanStrategy.PreBuildUp(IBuilderContext context)&#xD;&#xA;   at Microsoft.Practices.ObjectBuilder2.StrategyChain.ExecuteBuildUp(IBuilderContext context)&#xD;&#xA;   at Microsoft.Practices.ObjectBuilder2.BuilderContext.NewBuildUp(NamedTypeBuildKey newBuildKey)&#xD;&#xA;   at Microsoft.Practices.Unity.ObjectBuilder.NamedTypeDependencyResolverPolicy.Resolve(IBuilderContext context)&#xD;&#xA;   at lambda_method(Closure , IBuilderContext )&#xD;&#xA;   at Microsoft.Practices.ObjectBuilder2.DynamicBuildPlanGenerationContext.&lt;&gt;c__DisplayClass1.&lt;GetBuildMethod&gt;b__0(IBuilderContext context)&#xD;&#xA;   at Microsoft.Practices.ObjectBuilder2.DynamicMethodBuildPlan.BuildUp(IBuilderContext context)&#xD;&#xA;   at Microsoft.Practices.ObjectBuilder2.BuildPlanStrategy.PreBuildUp(IBuilderContext context)&#xD;&#xA;   at Microsoft.Practices.ObjectBuilder2.StrategyChain.ExecuteBuildUp(IBuilderContext context)&#xD;&#xA;   at Microsoft.Practices.ObjectBuilder2.BuilderContext.NewBuildUp(NamedTypeBuildKey newBuildKey)&#xD;&#xA;   at Microsoft.Practices.Unity.ObjectBuilder.NamedTypeDependencyResolverPolicy.Resolve(IBuilderContext context)&#xD;&#xA;   at lambda_method(Closure , IBuilderContext )&#xD;&#xA;   at Microsoft.Practices.ObjectBuilder2.DynamicBuildPlanGenerationContext.&lt;&gt;c__DisplayClass1.&lt;GetBuildMethod&gt;b__0(IBuilderContext context)&#xD;&#xA;   at Microsoft.Practices.ObjectBuilder2.DynamicMethodBuildPlan.BuildUp(IBuilderContext context)&#xD;&#xA;   at Microsoft.Practices.ObjectBuilder2.BuildPlanStrategy.PreBuildUp(IBuilderContext context)&#xD;&#xA;   at Microsoft.Practices.ObjectBuilder2.StrategyChain.ExecuteBuildUp(IBuilderContext context)&#xD;&#xA;   at Microsoft.Practices.Unity.UnityContainer.DoBuildUp(Type t, Object existing, String name, IEnumerable`1 resolverOverrides)&#xD;&#xA;   --- End of inner exception stack trace ---&#xD;&#xA;   at Microsoft.Practices.Unity.UnityContainer.DoBuildUp(Type t, Object existing, String name, IEnumerable`1 resolverOverrides)&#xD;&#xA;   at Microsoft.Practices.Unity.UnityContainer.Resolve(Type t, String name, ResolverOverride[] resolverOverrides)&#xD;&#xA;   at Microsoft.Practices.Unity.UnityContainerExtensions.Resolve(IUnityContainer container, Type t, ResolverOverride[] overrides)&#xD;&#xA;   at Microsoft.Practices.Unity.Mvc.UnityDependencyResolver.GetService(Type serviceType)&#xD;&#xA;   at System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)&#xD;&#xA;   --- End of inner exception stack trace ---&#xD;&#xA;   at System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)&#xD;&#xA;   at System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)&#xD;&#xA;   at System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)&#xD;&#xA;   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController&amp; controller, IControllerFactory&amp; factory)&#xD;&#xA;   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)&#xD;&#xA;   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)&#xD;&#xA;   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)&#xD;&#xA;   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()&#xD;&#xA;   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; completedSynchronously)" user="oguduvictor" time="2016-12-16T11:31:22.2260943Z">
+  <serverVariables>
+    <item name="ALL_HTTP">
+      <value string="HTTP_CONNECTION:keep-alive&#xD;&#xA;HTTP_ACCEPT:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8&#xD;&#xA;HTTP_ACCEPT_ENCODING:gzip, deflate, sdch, br&#xD;&#xA;HTTP_ACCEPT_LANGUAGE:en-US,en;q=0.8&#xD;&#xA;HTTP_COOKIE:__RequestVerificationToken=fNfdoIjnHnEXVQzBEoiBJvQvYiZYzMR8LejkGNmeAULvRYSD5I5N6CgJNJZWWegpmMxgu9R6sQxq_OQM5wzUdh_vlY3qSlQpaOs7fTCXupw1; .AspNet.ApplicationCookie=wzA-7tuuXzLN4ZgbiGndBey33xevDrZjW-JSXGAn13vgksiWu0V1K7IhmQTo6R5DNHKUAfALh7SgoMdV0acr80h5brUB9DmToYOER_t7BgTE0ZL1rvT3SZdZd57Zx8l_TxFScnLEtl0BPd_SMW6voQ6vnZVqiNtSbujD1Pq8N8cYY1CHOocYKgsbBZqiEKswTkBgpxZpW8_LtpzVC44A94jZXQPo8XLl1JQgAgsSnqUeSz4CS8MioWRNMeQvxoRPTA7RrE_Tb_lU1uQCWtWSE5FMT3MzCBufd4k-usyvowY5-5eRGJ4QaawkPFviOoGy2ORT2ggjTddPrAozSVcLGQjxvTlxEmR2miWrH4cxAAZGBEU1FTyJbDGIFtVZAln9Rg4VSAYibWIxp28Ne7AZcoCg0U7Mq-XG-bk_G_hHELRuxRtsWT6-M4qmOM_YsewwwQRzBfdk8c5_t82rCOIajDzZx_ncT9M0ZLIfHdAF7X4hmV-K8hhOBeTwAAAKM16gVimZGZU5vT3VVK34dDQCYg&#xD;&#xA;HTTP_HOST:localhost:3289&#xD;&#xA;HTTP_USER_AGENT:Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36&#xD;&#xA;HTTP_UPGRADE_INSECURE_REQUESTS:1&#xD;&#xA;" />
+    </item>
+    <item name="ALL_RAW">
+      <value string="Connection: keep-alive&#xD;&#xA;Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8&#xD;&#xA;Accept-Encoding: gzip, deflate, sdch, br&#xD;&#xA;Accept-Language: en-US,en;q=0.8&#xD;&#xA;Cookie: __RequestVerificationToken=fNfdoIjnHnEXVQzBEoiBJvQvYiZYzMR8LejkGNmeAULvRYSD5I5N6CgJNJZWWegpmMxgu9R6sQxq_OQM5wzUdh_vlY3qSlQpaOs7fTCXupw1; .AspNet.ApplicationCookie=wzA-7tuuXzLN4ZgbiGndBey33xevDrZjW-JSXGAn13vgksiWu0V1K7IhmQTo6R5DNHKUAfALh7SgoMdV0acr80h5brUB9DmToYOER_t7BgTE0ZL1rvT3SZdZd57Zx8l_TxFScnLEtl0BPd_SMW6voQ6vnZVqiNtSbujD1Pq8N8cYY1CHOocYKgsbBZqiEKswTkBgpxZpW8_LtpzVC44A94jZXQPo8XLl1JQgAgsSnqUeSz4CS8MioWRNMeQvxoRPTA7RrE_Tb_lU1uQCWtWSE5FMT3MzCBufd4k-usyvowY5-5eRGJ4QaawkPFviOoGy2ORT2ggjTddPrAozSVcLGQjxvTlxEmR2miWrH4cxAAZGBEU1FTyJbDGIFtVZAln9Rg4VSAYibWIxp28Ne7AZcoCg0U7Mq-XG-bk_G_hHELRuxRtsWT6-M4qmOM_YsewwwQRzBfdk8c5_t82rCOIajDzZx_ncT9M0ZLIfHdAF7X4hmV-K8hhOBeTwAAAKM16gVimZGZU5vT3VVK34dDQCYg&#xD;&#xA;Host: localhost:3289&#xD;&#xA;User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36&#xD;&#xA;Upgrade-Insecure-Requests: 1&#xD;&#xA;" />
+    </item>
+    <item name="APPL_MD_PATH">
+      <value string="/LM/W3SVC/5/ROOT" />
+    </item>
+    <item name="APPL_PHYSICAL_PATH">
+      <value string="C:\Users\VICTOR\Desktop\ClientManagement\ClientManagement.Web\" />
+    </item>
+    <item name="AUTH_TYPE">
+      <value string="ApplicationCookie" />
+    </item>
+    <item name="AUTH_USER">
+      <value string="oguduvictor" />
+    </item>
+    <item name="AUTH_PASSWORD">
+      <value string="" />
+    </item>
+    <item name="LOGON_USER">
+      <value string="oguduvictor" />
+    </item>
+    <item name="REMOTE_USER">
+      <value string="oguduvictor" />
+    </item>
+    <item name="CERT_COOKIE">
+      <value string="" />
+    </item>
+    <item name="CERT_FLAGS">
+      <value string="" />
+    </item>
+    <item name="CERT_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SERIALNUMBER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CERT_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CONTENT_LENGTH">
+      <value string="0" />
+    </item>
+    <item name="CONTENT_TYPE">
+      <value string="" />
+    </item>
+    <item name="GATEWAY_INTERFACE">
+      <value string="CGI/1.1" />
+    </item>
+    <item name="HTTPS">
+      <value string="off" />
+    </item>
+    <item name="HTTPS_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="INSTANCE_ID">
+      <value string="5" />
+    </item>
+    <item name="INSTANCE_META_PATH">
+      <value string="/LM/W3SVC/5" />
+    </item>
+    <item name="LOCAL_ADDR">
+      <value string="::1" />
+    </item>
+    <item name="PATH_INFO">
+      <value string="/Project/Create" />
+    </item>
+    <item name="PATH_TRANSLATED">
+      <value string="C:\Users\VICTOR\Desktop\ClientManagement\ClientManagement.Web\Project\Create" />
+    </item>
+    <item name="QUERY_STRING">
+      <value string="" />
+    </item>
+    <item name="REMOTE_ADDR">
+      <value string="::1" />
+    </item>
+    <item name="REMOTE_HOST">
+      <value string="::1" />
+    </item>
+    <item name="REMOTE_PORT">
+      <value string="57022" />
+    </item>
+    <item name="REQUEST_METHOD">
+      <value string="GET" />
+    </item>
+    <item name="SCRIPT_NAME">
+      <value string="/Project/Create" />
+    </item>
+    <item name="SERVER_NAME">
+      <value string="localhost" />
+    </item>
+    <item name="SERVER_PORT">
+      <value string="3289" />
+    </item>
+    <item name="SERVER_PORT_SECURE">
+      <value string="0" />
+    </item>
+    <item name="SERVER_PROTOCOL">
+      <value string="HTTP/1.1" />
+    </item>
+    <item name="SERVER_SOFTWARE">
+      <value string="Microsoft-IIS/10.0" />
+    </item>
+    <item name="URL">
+      <value string="/Project/Create" />
+    </item>
+    <item name="HTTP_CONNECTION">
+      <value string="keep-alive" />
+    </item>
+    <item name="HTTP_ACCEPT">
+      <value string="text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8" />
+    </item>
+    <item name="HTTP_ACCEPT_ENCODING">
+      <value string="gzip, deflate, sdch, br" />
+    </item>
+    <item name="HTTP_ACCEPT_LANGUAGE">
+      <value string="en-US,en;q=0.8" />
+    </item>
+    <item name="HTTP_COOKIE">
+      <value string="__RequestVerificationToken=fNfdoIjnHnEXVQzBEoiBJvQvYiZYzMR8LejkGNmeAULvRYSD5I5N6CgJNJZWWegpmMxgu9R6sQxq_OQM5wzUdh_vlY3qSlQpaOs7fTCXupw1; .AspNet.ApplicationCookie=wzA-7tuuXzLN4ZgbiGndBey33xevDrZjW-JSXGAn13vgksiWu0V1K7IhmQTo6R5DNHKUAfALh7SgoMdV0acr80h5brUB9DmToYOER_t7BgTE0ZL1rvT3SZdZd57Zx8l_TxFScnLEtl0BPd_SMW6voQ6vnZVqiNtSbujD1Pq8N8cYY1CHOocYKgsbBZqiEKswTkBgpxZpW8_LtpzVC44A94jZXQPo8XLl1JQgAgsSnqUeSz4CS8MioWRNMeQvxoRPTA7RrE_Tb_lU1uQCWtWSE5FMT3MzCBufd4k-usyvowY5-5eRGJ4QaawkPFviOoGy2ORT2ggjTddPrAozSVcLGQjxvTlxEmR2miWrH4cxAAZGBEU1FTyJbDGIFtVZAln9Rg4VSAYibWIxp28Ne7AZcoCg0U7Mq-XG-bk_G_hHELRuxRtsWT6-M4qmOM_YsewwwQRzBfdk8c5_t82rCOIajDzZx_ncT9M0ZLIfHdAF7X4hmV-K8hhOBeTwAAAKM16gVimZGZU5vT3VVK34dDQCYg" />
+    </item>
+    <item name="HTTP_HOST">
+      <value string="localhost:3289" />
+    </item>
+    <item name="HTTP_USER_AGENT">
+      <value string="Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36" />
+    </item>
+    <item name="HTTP_UPGRADE_INSECURE_REQUESTS">
+      <value string="1" />
+    </item>
+  </serverVariables>
+  <cookies>
+    <item name="__RequestVerificationToken">
+      <value string="fNfdoIjnHnEXVQzBEoiBJvQvYiZYzMR8LejkGNmeAULvRYSD5I5N6CgJNJZWWegpmMxgu9R6sQxq_OQM5wzUdh_vlY3qSlQpaOs7fTCXupw1" />
+    </item>
+    <item name=".AspNet.ApplicationCookie">
+      <value string="wzA-7tuuXzLN4ZgbiGndBey33xevDrZjW-JSXGAn13vgksiWu0V1K7IhmQTo6R5DNHKUAfALh7SgoMdV0acr80h5brUB9DmToYOER_t7BgTE0ZL1rvT3SZdZd57Zx8l_TxFScnLEtl0BPd_SMW6voQ6vnZVqiNtSbujD1Pq8N8cYY1CHOocYKgsbBZqiEKswTkBgpxZpW8_LtpzVC44A94jZXQPo8XLl1JQgAgsSnqUeSz4CS8MioWRNMeQvxoRPTA7RrE_Tb_lU1uQCWtWSE5FMT3MzCBufd4k-usyvowY5-5eRGJ4QaawkPFviOoGy2ORT2ggjTddPrAozSVcLGQjxvTlxEmR2miWrH4cxAAZGBEU1FTyJbDGIFtVZAln9Rg4VSAYibWIxp28Ne7AZcoCg0U7Mq-XG-bk_G_hHELRuxRtsWT6-M4qmOM_YsewwwQRzBfdk8c5_t82rCOIajDzZx_ncT9M0ZLIfHdAF7X4hmV-K8hhOBeTwAAAKM16gVimZGZU5vT3VVK34dDQCYg" />
+    </item>
+  </cookies>
+</error>

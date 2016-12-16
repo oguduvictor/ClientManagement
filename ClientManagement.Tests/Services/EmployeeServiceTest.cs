@@ -62,16 +62,28 @@ namespace ClientManagement.Tests.Services
         [TestMethod, TestCategory("Unit Test")]
         public void Should_Be_Able_To_Assign_Project_To_Employee()
         {
-            var project = Data.projects[0];
+            var projectId = Data.projects[0].Id;
             var employeeId = Data.Employees[2].Id;
-            _employeeService.AssignProjectToEmployee(employeeId, project);
+            _employeeService.AssignProjectToEmployee(employeeId, projectId);
+        }
+
+        [TestMethod, TestCategory("Unit Test")]
+        public void Should_Be_Able_To_Remove_Project_From_Employee()
+        {
+            var employee = _employeeService.GetEmployee(Data.Employees[2].Id);
+            employee.Projects.Add(Data.projects[0]);
+            var projectId = Data.projects[0].Id;
+            Assert.AreEqual(1, employee.Projects.Count);
+            _employeeService.RemoveProjectFromEmployee(employee.Id, projectId);
+            Assert.AreEqual(0, employee.Projects.Count);
         }
 
         [TestMethod, TestCategory("Unit Test")]
         public void Should_Be_Able_To_Save_Employee()
         {
-            var employee = Data.Employees[0];
-            _employeeService.Save(employee);
+            _employeeService.Save(Data.Employees[0]);
+            var employee = _employeeService.GetEmployee(30);
+            Assert.IsNotNull(employee);
         }
     }
 }

@@ -9,6 +9,9 @@ namespace ClientManagement.Core.Services
         List<Employee> GetAllEmployees();
         void Save(Employee employee);
         List<Project> GetProjectListForEmployee(int employeeId);
-        void AssignProjectToEmployee(int employeeId, Project project);
+        void Delete(int id);
+        void AssignProjectToEmployee(int employeeId, int projectId);
+        void ReassignProject(int projectId, int FromEmployeeId, int ToEmployeeId);
+        void RemoveProjectFromEmployee(int employeeId, int projectId);
     }
 }

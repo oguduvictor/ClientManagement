@@ -9,5 +9,6 @@ namespace ClientManagement.Core.Data.Repositories
         Project GetProject(int id);
         List<Project> GetAllProjects();
         void Update(Project project);
+        void Delete(int id);
     }
 }

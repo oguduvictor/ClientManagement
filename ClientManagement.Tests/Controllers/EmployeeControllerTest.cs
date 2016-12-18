@@ -5,6 +5,7 @@ using Moq;
 using ClientManagement.Tests.Core;
 using ClientManagement.Web.Controllers;
 using System.Web.Mvc;
+using System.Collections.Generic;
 
 namespace ClientManagement.Tests.Controllers
 {
@@ -27,13 +28,13 @@ namespace ClientManagement.Tests.Controllers
 
 
         [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Return_List_Of_Employees_In_Index()
+        public void Should_Be_Able_To_Return_All_Employees_In_Index()
         {
             var controller = new EmployeeController(_employeeServiceMock.Object);
 
-            var employees = controller.Index() as ViewResult;
+            var employees = controller.Index();
 
-            Assert.IsNotNull(employees.Model);
+            Assert.IsNotNull(employees);
         }
 
         [TestMethod, TestCategory("Unit Test")]

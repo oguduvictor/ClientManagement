@@ -1,16 +1,22 @@
 ﻿@model ClientManagement.Core.Models.Employee
 
-@{
-    ViewBag.Title = "Delete";
-}
 
-<h2>Delete</h2>
+<h2>
+    Details of @ViewBag.Employee
+</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<hr />
+
 <div>
-    <h4>Employee</h4>
-    <hr />
     <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+
         <dt>
             @Html.DisplayNameFor(model => model.FirstName)
         </dt>
@@ -52,13 +58,8 @@
         </dd>
 
     </dl>
-
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
-    }
 </div>
+<p>
+    @Html.ActionLink("Edit Your Employee Details", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("View Projects Assigned", "EmployeeProjects", new { id = Model.Id })
+</p>

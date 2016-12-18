@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<ClientManagement.Core.Models.Project>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "ClientProjects";
 }
 
-<h2>List Of Projects </h2>
-
 <p>
-    @Html.ActionLink("Create New Project", "Create")
+    <h2>
+        List of Projects For @ViewBag.Client
+    </h2>
 </p>
 <table class="table">
     <tr>
@@ -34,13 +34,11 @@
         <td>
             @Html.DisplayFor(modelItem => item.ProjectStatus)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("View Assigned Employees", "ProjectEmployees", new { id = item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
     </tr>
 }
 
 </table>
+<div>
+    <p>
+        @Html.ActionLink("Back To Client Lists", "Index", "Client");
+    </p>

@@ -42,8 +42,6 @@ namespace ClientManagement.Core.Data.Repositories
             dbEmployee.Gender = employee.Gender;
             dbEmployee.Salary = employee.Salary;
             dbEmployee.SkillLevel = employee.SkillLevel;
-            //if (employee.Projects != null)
-            //{
                 foreach (var project in employee.Projects)
                 {
                     if (project.Id == 0)
@@ -62,7 +60,7 @@ namespace ClientManagement.Core.Data.Repositories
                         dbProject.ClientId = dbProject.ClientId;
                     }
                 }
-            //}
+            
             _context.SaveChanges();
         }
 

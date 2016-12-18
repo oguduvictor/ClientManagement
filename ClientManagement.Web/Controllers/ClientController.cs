@@ -12,6 +12,7 @@ using ClientManagement.Core.Services;
 
 namespace ClientManagement.Web.Controllers
 {
+    [Authorize(Roles = "Manager, Employee")]
     public class ClientController : Controller
     {
         private DbManagementContext db = new DbManagementContext();
@@ -44,6 +45,14 @@ namespace ClientManagement.Web.Controllers
                 return HttpNotFound();
             }
             return View(client);
+        }
+
+        public ActionResult ClientProjects(int id)
+        {
+            var client = _clientService.GetClient(id).Name;
+            var projects = _clientService.GetClientProjects(id);
+            ViewBag.Client = client;
+            return View(projects);
         }
 
         // GET: Client/Create
@@ -119,14 +128,6 @@ namespace ClientManagement.Web.Controllers
             _clientService.Delete(id);
             return RedirectToAction("Index");
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        
     }
 }

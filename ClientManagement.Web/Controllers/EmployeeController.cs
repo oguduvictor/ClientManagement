@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace ClientManagement.Web.Controllers
 {
-    [Authorize(Roles ="Admin, Manager")]
+    [Authorize]
     public class EmployeeController : Controller
     {
         private readonly IEmployeeService _employeeService;
@@ -34,8 +34,8 @@ namespace ClientManagement.Web.Controllers
         // GET: Employee/Details/5
         public ActionResult Details(int id)
         {
-            _employeeService.GetEmployee(id);
-            return View();
+            var employee = _employeeService.GetEmployee(id);
+            return View(employee);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -53,18 +53,16 @@ namespace ClientManagement.Web.Controllers
 
         // POST: Employee/Create
         [HttpPost]
-        public ActionResult Create([Bind(Include ="Id,FirstName,LastName,Salary,Gender,SkillLevel")] Employee employee)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include ="Id,FirstName,LastName,Salary,Gender,SkillLevel,UserId")] Employee employee)
         {
-            try
+            if (ModelState.IsValid)
             {
                 _employeeService.Save(employee);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Details/" + employee.Id);
             }
-            catch
-            {
-                return View();
-            }
+            return View(employee);
         }
 
         // GET: Employee/Edit/5
@@ -75,6 +73,7 @@ namespace ClientManagement.Web.Controllers
 
         // POST: Employee/Edit/5
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,FirstName,LastName,Salary,Gender,SkillLevel")] Employee employee)
         {
             try
@@ -87,59 +86,13 @@ namespace ClientManagement.Web.Controllers
                 return View();
             }
         }
-
-        public bool isAdminUser()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                var user = User.Identity;
-                ApplicationDbContext context = new ApplicationDbContext();
-                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
-                var roles = UserManager.GetRoles(user.GetUserId());
-                if ((roles[0].ToString() == "Admin") || (roles[0].ToString() == "Manager"))
-                    return true;
-            }
-            return false;
-        }
+        
+        [Authorize]
         public ActionResult EmployeeProjects(int id)
         {
             var employee = _employeeService.GetEmployee(id);
             var projects = employee.Projects.ToList();
-            if (User.Identity.IsAuthenticated)
-            {
-                ViewBag.displayMenu = "No";
-
-                if (isAdminUser())
-                {
-                    ViewBag.displayMenu = "Yes";
-                }
-                return View(projects);
-            }
             return View(projects);
-        }
-
-        // GET: Employee/Delete/5
-        public ActionResult Delete(int id)
-        {
-            var employee = _employeeService.GetEmployee(id);
-            _employeeService.Delete(id);
-            return View(employee);
-        }
-
-        // POST: Employee/Delete/5
-        [HttpPost]
-        public ActionResult DeleteConfirmed(int id, [Bind(Include = "Id,FirstName,LastName,Salary,Gender,SkillLevel")] Employee employee)
-        {
-            try
-            {
-                _employeeService.Delete(id);
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }

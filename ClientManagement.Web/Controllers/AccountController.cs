@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ClientManagement.Web.Models;
+using ClientManagement.Core.Models;
+using ClientManagement.Core.Data.Db;
 
 namespace ClientManagement.Web.Controllers
 {
@@ -18,6 +20,7 @@ namespace ClientManagement.Web.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         ApplicationDbContext context;
+        DbManagementContext dbContext;
 
         public AccountController()
         {
@@ -141,7 +144,7 @@ namespace ClientManagement.Web.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            ViewBag.Name = new SelectList(context.Roles.Where(x => !x.Name.Contains("Admin")).ToList(), "Name", "Name");
+            ViewBag.UserRoles = new SelectList(context.Roles.Where(x => !x.Name.Contains("Admin")).ToList(), "Name", "Name");
             
             return View();
         }
@@ -155,7 +158,7 @@ namespace ClientManagement.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -167,11 +170,13 @@ namespace ClientManagement.Web.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
-                    return RedirectToAction("Index", "Users");
+                    var register = await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
+                    return RedirectToAction("Create", "Employee");
                 }
+
                 ViewBag.Name = new SelectList(context.Roles.Where(x => !x.Name.Contains("Admin"))
                                 .ToList(), "Name", "Name");
+                
                 AddErrors(result);
             }
 

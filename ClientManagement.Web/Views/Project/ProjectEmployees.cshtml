@@ -1,11 +1,15 @@
 ﻿@model IEnumerable<ClientManagement.Core.Models.Employee>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "ProjectEmployees";
 }
 
-<h2>Index</h2>
 
+<p>
+    <h2>
+        List of Employees working on @ViewBag.Project 
+    </h2>
+</p>
 <table class="table">
     <tr>
         <th>
@@ -15,18 +19,12 @@
             @Html.DisplayNameFor(model => model.LastName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Salary)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.SkillLevel)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Gender)
         </th>
-        
-        <th>
-            @Html.DisplayNameFor(model => model.Projects)
-        </th>
+        <th></th>
     </tr>
 
 @foreach (var item in Model) {
@@ -38,27 +36,17 @@
             @Html.DisplayFor(modelItem => item.LastName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Salary)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.SkillLevel)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Gender)
         </td>
-        <td>
-            @foreach (var project in item.Projects)
-            {
-                @Html.DisplayFor(projectItem => project.Title)
-                <br />
-            }
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-            @Html.ActionLink("View Projects", "EmployeeProjects", new { id=item.Id }) 
-        </td>
     </tr>
 }
 
 </table>
+<div>
+    <p>
+        @Html.ActionLink("Back To Project Lists", "Index", "Project");
+    </p>
+</div>

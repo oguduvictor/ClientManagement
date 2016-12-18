@@ -21,7 +21,7 @@ namespace ClientManagement.Web.Controllers
 
                 if (!isAdminUser())
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Employee");
                 }
             }
             else
@@ -40,15 +40,8 @@ namespace ClientManagement.Web.Controllers
                 var user = User.Identity;
                 ApplicationDbContext context = new ApplicationDbContext();
                 var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
-                var s = UserManager.GetRoles(user.GetUserId());
-                if (s[0].ToString() == "Admin")
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                var userRole = UserManager.GetRoles(user.GetUserId());
+                return  (userRole[0].ToString() == "Manager");
             }
             return false;
         }

@@ -12,6 +12,7 @@ using ClientManagement.Core.Services;
 
 namespace ClientManagement.Web.Controllers
 {
+    [Authorize(Roles = "Admin, Manager")]
     public class ProjectController : Controller
     {
         private DbManagementContext db = new DbManagementContext();
@@ -47,6 +48,14 @@ namespace ClientManagement.Web.Controllers
                 return HttpNotFound();
             }
             return View(project);
+        }
+
+        public ActionResult ProjectEmployees(int id)
+        {
+            var project = _projectService.GetProject(id);
+            var projectEmployees = _projectService.GetEmployeeListForProject(id);
+            ViewBag.Project = project.Title;
+            return View(projectEmployees);
         }
 
         // GET: Project/Create

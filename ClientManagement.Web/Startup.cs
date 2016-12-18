@@ -31,7 +31,7 @@ namespace ClientManagement.Web
                 user.UserName = "oguduvictor";
                 user.Email = "victor.ogudu@gmail.com";
 
-                string userPWD = "Onosetale1994@";
+                string userPWD = "Onosetale1@";
 
                 var chkUser = userManager.Create(user, userPWD);
 

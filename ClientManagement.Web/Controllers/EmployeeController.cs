@@ -15,10 +15,7 @@ namespace ClientManagement.Web.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeService _employeeService;
-        public EmployeeController()
-        {
-            _employeeService = new EmployeeService();
-        }
+        
         public EmployeeController(IEmployeeService employeeService)
         {
             _employeeService = employeeService;

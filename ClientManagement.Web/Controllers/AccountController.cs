@@ -20,19 +20,18 @@ namespace ClientManagement.Web.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         ApplicationDbContext context;
-        DbManagementContext dbContext;
 
         public AccountController()
         {
             context = new ApplicationDbContext();
         }
-
+        /*
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
         {
             UserManager = userManager;
             SignInManager = signInManager;
         }
-
+        */
         public ApplicationSignInManager SignInManager
         {
             get

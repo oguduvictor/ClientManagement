@@ -12,17 +12,11 @@ using ClientManagement.Core.Services;
 
 namespace ClientManagement.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Manager")]
+    [Authorize]
     public class ProjectController : Controller
     {
-        private DbManagementContext db = new DbManagementContext();
-        private IProjectService _projectService;
-
-        public ProjectController()
-        {
-            _projectService = new ProjectService();
-        }
-
+        private readonly IProjectService _projectService;
+       
         public ProjectController(IProjectService projectService)
         {
             _projectService = projectService;
@@ -61,7 +55,7 @@ namespace ClientManagement.Web.Controllers
         // GET: Project/Create
         public ActionResult Create()
         {
-            ViewBag.ClientId = new SelectList(db.Clients, "Id", "Name");
+           // ViewBag.ClientId = new SelectList(db.Clients, "Id", "Name");
             return View();
         }
 
@@ -92,7 +86,7 @@ namespace ClientManagement.Web.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ClientId = new SelectList(db.Clients, "Id", "Name", project.ClientId);
+          //  ViewBag.ClientId = new SelectList(db.Clients, "Id", "Name", project.ClientId);
             return View(project);
         }
         // POST: Project/Edit/5

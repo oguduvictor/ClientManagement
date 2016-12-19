@@ -15,12 +15,7 @@ namespace ClientManagement.Web.Controllers
     [Authorize(Roles = "Manager, Employee")]
     public class ClientController : Controller
     {
-        private DbManagementContext db = new DbManagementContext();
         private readonly IClientService _clientService;
-        public ClientController()
-        {
-            _clientService = new ClientService();
-        }
         public ClientController(IClientService clientService)
         {
             _clientService = clientService;

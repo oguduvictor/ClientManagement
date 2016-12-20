@@ -1,0 +1,52 @@
+﻿@model IEnumerable<ClientManagement.Core.Models.Project>
+
+
+
+@{
+    ViewBag.Title = "Project Assignment to Employee";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h2 class="text-center text-capitalize">Assign A Project To <i>@ViewBag.EmployeeName</i></h2>
+
+        <div class="row">
+            <div class="form-horizontal col-md-6 col-md-offset-3">
+                <hr />
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">ProjectName</label>
+
+                    <div class="col-md-10">
+                        <select class="form-control" name="ProjectId">
+                            <option>Select A Project</option>
+                            @try
+                            {
+                                foreach (var project in Model)
+                                {
+                                    <option value="@project.Id">@project.Title</option>
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                Html.RenderAction("Index", "Employee");
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <input type="text" name="EmployeeId" hidden value="@ViewBag.EmployeeId" />
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Add" class="btn btn-warning btn-block" />
+                    </div>
+                </div>
+                <hr />
+            </div>
+        </div>
+    </div>
+}

@@ -8,11 +8,7 @@ namespace ClientManagement.Core.Services
     public class ClientService: IClientService
     {
         private readonly IClientRepository _clientRepository;
-
-        public ClientService()
-        {
-            _clientRepository = new ClientRepository();
-        }
+        
         public ClientService(IClientRepository clientRepository)
         {
             _clientRepository = clientRepository;

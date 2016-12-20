@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
+﻿using System.Net;
 using System.Web.Mvc;
-using ClientManagement.Core.Data.Db;
 using ClientManagement.Core.Models;
 using ClientManagement.Core.Services;
 
@@ -15,7 +8,7 @@ namespace ClientManagement.Web.Controllers
     [Authorize(Roles = "Manager, Employee")]
     public class ClientController : Controller
     {
-        private readonly IClientService _clientService;
+        internal readonly IClientService _clientService;
         public ClientController(IClientService clientService)
         {
             _clientService = clientService;
@@ -42,11 +35,14 @@ namespace ClientManagement.Web.Controllers
             return View(client);
         }
 
-        public ActionResult ClientProjects(int id)
+        public ActionResult ClientProjects(int? id)
         {
-            var client = _clientService.GetClient(id).Name;
-            var projects = _clientService.GetClientProjects(id);
-            ViewBag.Client = client;
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var projects = _clientService.GetClientProjects(id.Value);
+            ViewBag.ClientName = _clientService.GetClient(id.Value).Name;
             return View(projects);
         }
 
@@ -59,7 +55,7 @@ namespace ClientManagement.Web.Controllers
         // POST: Client/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,EmailAddress,Projects")] Client client)
+        public ActionResult Create([Bind(Include = "Id,Name,EmailAddress")] Client client)
         {
             if (ModelState.IsValid)
             {
@@ -86,8 +82,6 @@ namespace ClientManagement.Web.Controllers
         }
 
         // POST: Client/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name,EmailAddress")] Client client)

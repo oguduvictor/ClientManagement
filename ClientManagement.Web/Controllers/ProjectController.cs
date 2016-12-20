@@ -16,14 +16,16 @@ namespace ClientManagement.Web.Controllers
     public class ProjectController : Controller
     {
         private readonly IProjectService _projectService;
+        private readonly IClientService _clientService;
        
-        public ProjectController(IProjectService projectService)
+        public ProjectController(IProjectService projectService, IClientService clientService)
         {
             _projectService = projectService;
+            _clientService = clientService;
         }
 
         // GET: Project
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
             var projects = _projectService.GetAllProjects();
             return View(projects);
@@ -41,6 +43,8 @@ namespace ClientManagement.Web.Controllers
             {
                 return HttpNotFound();
             }
+            var clients = _clientService.GetAllClients();
+            ViewBag.ClientName = clients.FirstOrDefault(x=>x.Id == project.ClientId).Name;
             return View(project);
         }
 
@@ -55,7 +59,7 @@ namespace ClientManagement.Web.Controllers
         // GET: Project/Create
         public ActionResult Create()
         {
-           // ViewBag.ClientId = new SelectList(db.Clients, "Id", "Name");
+            ViewBag.ClientId = new SelectList(_clientService.GetAllClients(), "Id", "Name");
             return View();
         }
 
@@ -69,8 +73,7 @@ namespace ClientManagement.Web.Controllers
                 _projectService.Save(project);
                 return RedirectToAction("Index");
             }
-            var clientIds = project.Client.Name;
-            ViewBag.ClientId = new SelectList(clientIds, "Id", "Name", project.ClientId);
+            ViewBag.ClientId = new SelectList(_clientService.GetAllClients(), "Id", "Name", project.ClientId);
             return View(project);
         }
 
@@ -81,12 +84,13 @@ namespace ClientManagement.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Project project = _projectService.GetProject(id.Value);
+            var project = _projectService.GetProject(id.Value);
+            
             if (project == null)
             {
                 return HttpNotFound();
             }
-          //  ViewBag.ClientId = new SelectList(db.Clients, "Id", "Name", project.ClientId);
+            ViewBag.ClientId = new SelectList(_clientService.GetAllClients(), "Id", "Name", project.ClientId);
             return View(project);
         }
         // POST: Project/Edit/5
@@ -99,7 +103,7 @@ namespace ClientManagement.Web.Controllers
                 _projectService.Save(project);
                 return RedirectToAction("Index");
             }
-            ViewBag.ClientId = new SelectList(project.Client.Name, "Id", "Name", project.ClientId);
+            ViewBag.ClientId = new SelectList(_clientService.GetAllClients(), "Id", "Name", project.ClientId);
             return View(project);
         }
 
@@ -110,7 +114,7 @@ namespace ClientManagement.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Project project = _projectService.GetProject(id.Value);
+            var project = _projectService.GetProject(id.Value);
             if (project == null)
             {
                 return HttpNotFound();

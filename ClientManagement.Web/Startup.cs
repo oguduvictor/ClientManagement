@@ -20,25 +20,7 @@ namespace ClientManagement.Web
             ApplicationDbContext context = new ApplicationDbContext();
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
-
-            if (!roleManager.RoleExists("Admin"))
-            {
-                var role = new IdentityRole();
-                role.Name = "Admin";
-                roleManager.Create(role);
-
-                var user = new ApplicationUser();
-                user.UserName = "oguduvictor";
-                user.Email = "victor.ogudu@gmail.com";
-
-                string userPWD = "Onosetale1@";
-
-                var chkUser = userManager.Create(user, userPWD);
-
-                if (chkUser.Succeeded)
-                    userManager.AddToRole(user.Id, "Admin");
-            }
-
+            
             if (!roleManager.RoleExists("Manager"))
             {
                 var role = new IdentityRole();

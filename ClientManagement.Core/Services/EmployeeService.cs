@@ -9,11 +9,7 @@ namespace ClientManagement.Core.Services
     public class EmployeeService: IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
-
-        public EmployeeService()
-        {
-            _employeeRepository = new EmployeeRepository();
-        }
+        
         public EmployeeService(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
@@ -29,6 +25,7 @@ namespace ClientManagement.Core.Services
         public void Save(Employee employee)
         {
             var dbEmployee = _employeeRepository.GetEmployee(employee.Id);
+            employee.Projects = new List<Project>();
             if (dbEmployee == null)
                 _employeeRepository.Create(employee);
             else

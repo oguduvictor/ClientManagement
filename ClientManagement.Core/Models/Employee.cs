@@ -19,5 +19,6 @@ namespace ClientManagement.Core.Models
         public int SkillLevel { get; set; }
         public Gender Gender { get; set; }
         public virtual ICollection<Project> Projects { get; set; }
+        public string UserId { get; set; }
     }
 }

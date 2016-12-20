@@ -143,7 +143,7 @@ namespace ClientManagement.Web.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            ViewBag.UserRoles = new SelectList(context.Roles.Where(x => !x.Name.Contains("Admin")).ToList(), "Name", "Name");
+            ViewBag.UserRoles = new SelectList(context.Roles.ToList(), "Name", "Name");
             
             return View();
         }
@@ -169,13 +169,9 @@ namespace ClientManagement.Web.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    var register = await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
+                    await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
                     return RedirectToAction("Create", "Employee");
                 }
-
-                ViewBag.Name = new SelectList(context.Roles.Where(x => !x.Name.Contains("Admin"))
-                                .ToList(), "Name", "Name");
-                
                 AddErrors(result);
             }
 

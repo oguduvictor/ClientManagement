@@ -27,7 +27,7 @@ namespace ClientManagement.Tests.Controllers
 
 
         [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Return_List_Of_Employees_In_Index()
+        public void Should_Be_Able_To_Return_List_Of_Clients_In_Index()
         {
             var controller = new ClientController(_clientServiceMock.Object);
 
@@ -37,7 +37,7 @@ namespace ClientManagement.Tests.Controllers
         }
 
         [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Retrieve_An_Employee()
+        public void Should_Be_Able_To_Retrieve_A_Client()
         {
             var controller = new ClientController(_clientServiceMock.Object);
             var client = controller.Details(It.IsAny<int>());
@@ -45,7 +45,7 @@ namespace ClientManagement.Tests.Controllers
         }
 
         [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Create_Employee()
+        public void Should_Be_Able_To_Create_Client()
         {
             var controller = new ClientController(_clientServiceMock.Object);
             controller.Create(Data.clients[0]);

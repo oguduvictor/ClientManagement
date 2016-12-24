@@ -12,8 +12,8 @@ namespace ClientManagement.Tests.Controllers
     [TestClass]
     public class ProjectControllerTest
     {
-
-        private Mock<IProjectService> _projectServiceMock;
+        private Mock<IProjectService> _projectServiceMock = new Mock<IProjectService>();
+        private Mock<IClientService> _clientServiceMock = new Mock<IClientService>();
         [TestInitialize]
         public void BeforeEach()
         {

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ClientManagement.Core.Models;
-using System.Data.Entity;
 
 namespace ClientManagement.Core.Data.Repositories
 {
@@ -74,8 +73,8 @@ namespace ClientManagement.Core.Data.Repositories
 
         public void RemoveProjectFromEmployee(int employeeId, int projectId)
         {
-            var employee = GetEmployee(employeeId);
-            var project = employee.Projects.FirstOrDefault(x => x.Id == projectId);
+            var employee = _context.Employees.FirstOrDefault(x => x.Id == employeeId);
+            var project = _context.Projects.FirstOrDefault(x => x.Id == projectId);
             employee.Projects.Remove(project);
             _context.SaveChanges();
         }

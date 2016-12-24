@@ -5,10 +5,10 @@ using ClientManagement.Core.Services;
 
 namespace ClientManagement.Web.Controllers
 {
-    [Authorize(Roles = "Manager, Employee")]
+    [Authorize(Roles = "Manager")]
     public class ClientController : Controller
     {
-        internal readonly IClientService _clientService;
+        private readonly IClientService _clientService;
         public ClientController(IClientService clientService)
         {
             _clientService = clientService;

@@ -1,18 +1,16 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ClientManagement.Core.Services;
 using Moq;
 using ClientManagement.Tests.Core;
 using ClientManagement.Web.Controllers;
-using System.Web.Mvc;
-using System.Collections.Generic;
 
 namespace ClientManagement.Tests.Controllers
 {
     [TestClass]
     public class EmployeeControllerTest
     {
-        private Mock<IEmployeeService> _employeeServiceMock;
+        private Mock<IEmployeeService> _employeeServiceMock = new Mock<IEmployeeService>();
+        private Mock<IProjectService> _projectServiceMock = new Mock<IProjectService>() ;
         [TestInitialize]
         public void BeforeEach()
         {
@@ -24,17 +22,6 @@ namespace ClientManagement.Tests.Controllers
                 {
                     return employees.Find(x => x.Id == input);
                 });
-        }
-
-
-        [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Return_All_Employees_In_Index()
-        {
-            var controller = new EmployeeController(_employeeServiceMock.Object);
-
-            var employees = controller.Index();
-
-            Assert.IsNotNull(employees);
         }
 
         [TestMethod, TestCategory("Unit Test")]

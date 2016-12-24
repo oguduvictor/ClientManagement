@@ -8,7 +8,7 @@ namespace ClientManagement.Core.Models
     {
         public Employee()
         {
-            var Projects = new List<Project>();
+            Projects = new List<Project>();
         }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None) ]

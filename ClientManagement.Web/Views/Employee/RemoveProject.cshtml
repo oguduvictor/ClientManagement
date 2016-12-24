@@ -1,10 +1,9 @@
 ﻿@model IEnumerable<ClientManagement.Core.Models.Project>
-
 @{
-    ViewBag.Title = "Assign Project";
+    ViewBag.Title = "Remove Project From Employee";
 }
 <div class="row">
-    <h2 class="text-center">Assign Project To @ViewBag.Employee.FirstName @ViewBag.Employee.LastName</h2>
+    <h2 class="text-center text-capitalize">Remove A Project From @ViewBag.Employee.FirstName @ViewBag.Employee.LastName</h2>
 
     @using (Html.BeginForm())
     {
@@ -28,7 +27,7 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Add" class="btn btn-success btn-block" />
+                    <input type="submit" value="Remove" class="btn btn-danger btn-block" />
                 </div>
             </div>
             <hr />
@@ -37,5 +36,5 @@
 </div>
 
 <div>
-    @Html.ActionLink("Back to Employees List", "Index")
+    @Html.ActionLink("Back to List", "Index")
 </div>

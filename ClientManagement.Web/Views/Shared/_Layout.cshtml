@@ -17,24 +17,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("CMS", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("CMS", "Index", "Employee", new { area = "" }, new { @class = "navbar-brand" })
             </div>
                 <div class="navbar-collapse collapse">
-                    @if (User.IsInRole("Manager"))
-                    {
-                        <ul class="nav navbar-nav">
-                            <li>@Html.ActionLink("Employees Management", "Index", "Employee")</li>
-                            <li>@Html.ActionLink("Client Management", "Index", "Client")</li>
-                            <li>@Html.ActionLink("Project Management", "Index", "Project")</li>
-                        </ul>
-                    }
-                    @if (User.IsInRole("Employee"))
-                    {
-                        <ul class="nav navbar-nav">
-                            <li>@Html.ActionLink("View Projects", "Index", "Employee")</li>
-                            <li>@Html.ActionLink("View Details", "Details", "Employee")</li>
-                        </ul>
-                    }
                     @Html.Partial("_LoginPartial")
                 </div>
             

@@ -25,13 +25,6 @@ namespace ClientManagement.Web.Controllers
         {
             context = new ApplicationDbContext();
         }
-        /*
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-        }
-        */
         public ApplicationSignInManager SignInManager
         {
             get
@@ -170,6 +163,7 @@ namespace ClientManagement.Web.Controllers
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
+                    await SignInAsync(user, true);
                     return RedirectToAction("Create", "Employee");
                 }
                 AddErrors(result);
@@ -178,7 +172,12 @@ namespace ClientManagement.Web.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-
+        private async Task SignInAsync(ApplicationUser user, bool isPersistent)
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+            AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
+        }
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
@@ -399,7 +398,7 @@ namespace ClientManagement.Web.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Employee");
         }
 
         //

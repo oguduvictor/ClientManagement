@@ -12,7 +12,7 @@ using ClientManagement.Core.Services;
 
 namespace ClientManagement.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Manager")]
     public class ProjectController : Controller
     {
         private readonly IProjectService _projectService;
@@ -23,9 +23,13 @@ namespace ClientManagement.Web.Controllers
             _projectService = projectService;
             _clientService = clientService;
         }
+        public ProjectController(IProjectService projectService)
+        {
+            _projectService = projectService;
+        }
 
         // GET: Project
-        public ActionResult Index(int? id)
+        public ActionResult Index()
         {
             var projects = _projectService.GetAllProjects();
             return View(projects);

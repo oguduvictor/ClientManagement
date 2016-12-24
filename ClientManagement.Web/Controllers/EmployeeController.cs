@@ -1,28 +1,32 @@
 ﻿using ClientManagement.Core.Models;
 using ClientManagement.Core.Services;
+using ClientManagement.Web.Models;
 using Microsoft.AspNet.Identity;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 
 namespace ClientManagement.Web.Controllers
 {
+    [HandleError]
     [Authorize]
     public class EmployeeController : Controller
     {
         private readonly IEmployeeService _employeeService;
         private readonly IProjectService _projectService;
+        private Employee employee;
         public EmployeeController(IEmployeeService employeeService, IProjectService projectService)
         {
             _employeeService = employeeService;
             _projectService = projectService;
         }
-
+        public EmployeeController(IEmployeeService employeeService)
+        {
+            _employeeService = employeeService;
+        }
         // GET: Employee
         public ActionResult Index()
         {
-            
             if (User.IsInRole("Manager"))
             {
                 var employees = _employeeService.GetAllEmployees();
@@ -30,7 +34,11 @@ namespace ClientManagement.Web.Controllers
             }
             else
             {
-                var employeeId = _employeeService.GetAllEmployees().Find(x => x.UserId == User.Identity.GetUserId()).Id;
+                employee = _employeeService.GetAllEmployees().FirstOrDefault(x => x.UserId == User.Identity.GetUserId());
+                if (employee == null)
+                    return RedirectToAction("Create", "Employee");
+
+                var employeeId = employee.Id;
                 return RedirectToAction("EmployeeProjects/" + employeeId, "Employee");
             }
         }
@@ -40,42 +48,62 @@ namespace ClientManagement.Web.Controllers
         {
             if (id == null)
             {
-                id = _employeeService.GetAllEmployees().Find(x => x.UserId == User.Identity.GetUserId()).Id;
+                employee = _employeeService.GetAllEmployees().Find(x => x.UserId == User.Identity.GetUserId());
             }
-            var employee = _employeeService.GetEmployee(id.Value);
+            if (employee == null)
+            {
+                return RedirectToAction("Create", "Employee");
+            }
             ViewBag.Employee = User.Identity.GetUserName();
             return View(employee);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Manager")]
         public ActionResult AssignProject(int? id)
         {
             if (id == null)
             {
-                id = _employeeService.GetAllEmployees().Find(x => x.UserId == User.Identity.GetUserId()).Id;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var projects = _projectService.GetAllProjects();
-            var employee = _employeeService.GetEmployee(id.Value);
-            ViewBag.EmployeeName = string.Format("{0} {1}", employee.FirstName,employee.LastName);
-            ViewBag.EmployeId = id.Value;
-            ViewBag.Projects = new SelectList(projects, "Id", "Title");
+            ViewBag.Projects = projects;
+            ViewBag.Employee = _employeeService.GetEmployee(id.Value);
             return View(projects);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AssignProject(int? employeeId, int? projectId)
+        [Authorize(Roles = "Manager")]
+        public ActionResult AssignProject(EmployeeProject employeeProject)
         {
-            if (employeeId == null)
-            {
-                employeeId = _employeeService.GetAllEmployees().Find(x => x.UserId == User.Identity.GetUserId()).Id;
-            }
-            if(projectId == null)
-            {
-                var projects = _projectService.GetAllProjects();
-            }
-            _employeeService.AssignProjectToEmployee(employeeId.Value, projectId.Value);
+            var employeeId = employeeProject.EmployeeId;
+            var projectId = employeeProject.ProjectId;
+            _employeeService.AssignProjectToEmployee(employeeId, projectId);
+            return RedirectToAction("Index");
+        }
 
-            return View();
+        [HttpGet]
+        [Authorize(Roles = "Manager")]
+        public ActionResult RemoveProject(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var projects = _employeeService.GetEmployee(id.Value).Projects.ToList();
+            ViewBag.Projects = projects;
+            ViewBag.Employee = _employeeService.GetEmployee(id.Value);
+            return View(projects);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
+        public ActionResult RemoveProject([Bind(Include = "EmployeeId,ProjectId")] EmployeeProject employeeProject)
+        {
+            var employeeId = employeeProject.EmployeeId;
+            var projectId = employeeProject.ProjectId;
+            _employeeService.RemoveProjectFromEmployee(employeeId, projectId);
+            return RedirectToAction("Index");
         }
 
         // GET: Employee/Create
@@ -91,10 +119,8 @@ namespace ClientManagement.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                employee.Projects = new List<Project>();
                 _employeeService.Save(employee);
-
-                return RedirectToAction("Details/" + employee.Id);
+                return RedirectToAction("Index");
             }
             return View(employee);
         }
@@ -106,7 +132,7 @@ namespace ClientManagement.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var employee = _employeeService.GetEmployee(id.Value);
+            employee = _employeeService.GetEmployee(id.Value);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -130,10 +156,9 @@ namespace ClientManagement.Web.Controllers
             }
         }
         
-        [Authorize]
         public ActionResult EmployeeProjects(int id)
         {
-            var employee = _employeeService.GetEmployee(id);
+            employee = _employeeService.GetEmployee(id);
             var projects = employee.Projects.ToList();
             return View(projects);
         }

@@ -10,14 +10,6 @@
 <div>
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.FirstName)
         </dt>
 
@@ -60,6 +52,9 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit Your Employee Details", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Edit Employee Details", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("View Projects Assigned", "EmployeeProjects", new { id = Model.Id })
 </p>
+<div>
+    @Html.ActionLink("Back", "Index")
+</div>

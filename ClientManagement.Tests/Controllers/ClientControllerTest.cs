@@ -15,11 +15,11 @@ namespace ClientManagement.Tests.Controllers
         [TestInitialize]
         public void BeforeEach()
         {
-            var clients = Data.clients;
+            var clients = Data.Clients;
             _clientServiceMock = new Mock<IClientService>();
             _clientServiceMock.Setup(x => x.GetAllClients()).Returns(clients);
-            _clientServiceMock.Setup(x => x.GetClient(It.IsAny<int>()))
-                .Returns((int input) =>
+            _clientServiceMock.Setup(x => x.GetClient(It.IsAny<Guid>()))
+                .Returns((Guid input) =>
                 {
                     return clients.Find(x => x.Id == input);
                 });
@@ -40,7 +40,7 @@ namespace ClientManagement.Tests.Controllers
         public void Should_Be_Able_To_Retrieve_A_Client()
         {
             var controller = new ClientController(_clientServiceMock.Object);
-            var client = controller.Details(It.IsAny<int>());
+            var client = controller.Details(It.IsAny<Guid>());
             Assert.IsNotNull(client);
         }
 
@@ -48,7 +48,7 @@ namespace ClientManagement.Tests.Controllers
         public void Should_Be_Able_To_Create_Client()
         {
             var controller = new ClientController(_clientServiceMock.Object);
-            controller.Create(Data.clients[0]);
+            controller.Create(Data.Clients[0]);
         }
     }
 }

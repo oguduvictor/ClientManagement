@@ -7,7 +7,7 @@ namespace ClientManagement.Core.Data.Db.Mappings
     {
         public ProjectMap()
         {
-            ToTable("Project");
+            ToTable("Projects");
             HasKey(x => x.Id);
             
             Property(x => x.Title).HasColumnName("ProjectTitle");

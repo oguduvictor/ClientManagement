@@ -6,6 +6,7 @@ using ClientManagement.Core.Models;
 using Moq;
 using ClientManagement.Core.Services;
 using ClientManagement.Tests.Core;
+using System;
 
 namespace ClientManagement.Tests.Controllers
 {
@@ -17,11 +18,11 @@ namespace ClientManagement.Tests.Controllers
         [TestInitialize]
         public void BeforeEach()
         {
-            var projects = Data.projects;
+            var projects = Data.Projects;
             _projectServiceMock = new Mock<IProjectService>();
             _projectServiceMock.Setup(x => x.GetAllProjects()).Returns(projects);
-            _projectServiceMock.Setup(x => x.GetProject(It.IsAny<int>()))
-                .Returns((int input) =>
+            _projectServiceMock.Setup(x => x.GetProject(It.IsAny<Guid>()))
+                .Returns((Guid input) =>
                 {
                     return projects.FirstOrDefault(x => x.Id == input);
                 });
@@ -42,7 +43,7 @@ namespace ClientManagement.Tests.Controllers
         public void Should_Be_Able_To_Retrieve_A_Project()
         {
             var controller = new ProjectController(_projectServiceMock.Object);
-            var project = controller.Details(It.IsAny<int>());
+            var project = controller.Details(It.IsAny<Guid>());
             Assert.IsNotNull(project);
         }
 
@@ -50,8 +51,7 @@ namespace ClientManagement.Tests.Controllers
         public void Should_Be_Able_To_Create_And_Assign_Project_To_Client()
         {
             var controller = new ProjectController(_projectServiceMock.Object);
-            var client = new Client { Id = 1, Name = "Nextekk", EmailAddress = "info@nextekk.com"};
-            var project = new Project { Id = 2, Title = "Client Management Solution", Description = "Program that calculates", ProjectStatus = ProjectStatus.InProgress, ClientId = 1 };
+            var project = Data.Projects[0];
             controller.Create(project);
         }
     }

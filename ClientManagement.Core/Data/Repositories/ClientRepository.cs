@@ -31,9 +31,9 @@ namespace ClientManagement.Core.Data.Repositories
         {
             return _context.Clients.ToList();
         }
-        public Client GetClient(int clientId)
+        public Client GetClient(Guid clientId)
         {
-            return _context.Clients.Find(clientId);
+            return GetAllClients().FirstOrDefault(x => x.Id == clientId);
         }
         public void Update(Client client)
         {
@@ -44,7 +44,7 @@ namespace ClientManagement.Core.Data.Repositories
             
             foreach (var project in client.Projects)
             {
-                if (project.Id == 0)
+                if (project.Id == null)
                 {
                     dbClient.Projects.Add(project);
                     continue;
@@ -63,9 +63,9 @@ namespace ClientManagement.Core.Data.Repositories
             _context.SaveChanges();
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
-            var client = _context.Clients.Find(id);
+            var client = GetClient(id);
             _context.Clients.Remove(client);
             _context.SaveChanges();
         }

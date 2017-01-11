@@ -18,11 +18,11 @@ namespace ClientManagement.Tests.Services
         [TestInitialize]
         public void BeforeEach()
         {
-            var projects = Data.projects;
+            var projects = Data.Projects;
             _projectRepoMock = new Mock<IProjectRepository>();
             _projectRepoMock.Setup(x => x.GetAllProjects()).Returns(projects);
-            _projectRepoMock.Setup(x => x.GetProject(It.IsAny<int>()))
-                .Returns((int input) => 
+            _projectRepoMock.Setup(x => x.GetProject(It.IsAny<Guid>()))
+                .Returns((Guid input) => 
                 {
                     return projects.FirstOrDefault(x => x.Id == input);
                 });
@@ -40,7 +40,7 @@ namespace ClientManagement.Tests.Services
         [TestMethod, TestCategory("Unit Test")]
         public void Should_Be_Able_To_Retrieve_A_Project()
         {
-            var project = _projectService.GetProject(10);
+            var project = _projectService.GetProject(Data.Projects[0].Id);
 
             Assert.IsNotNull(project);
         }
@@ -48,15 +48,15 @@ namespace ClientManagement.Tests.Services
         [TestMethod, TestCategory("Unit Test")]
         public void Should_Be_Able_To_Get_All_Employees_For_A_Project()
         {
-            var employees = _projectService.GetEmployeeListForProject(10);
+            var employees = _projectService.GetEmployeeListForProject(Data.Projects[0].Id);
 
-            Assert.AreEqual(2, employees.Count);
+            Assert.IsNotNull(employees);
         }
 
         [TestMethod, TestCategory("Unit Test")]
         public void Should_Be_Able_To_Add_A_Project()
         {
-            var project = Data.projects[2];
+            var project = Data.Projects[2];
             _projectService.Save(project);
         }
     }

@@ -13,7 +13,7 @@ namespace ClientManagement.Core.Services
         {
             _projectRepository = projectRepository;
         }
-        public Project GetProject(int id)
+        public Project GetProject(Guid id)
         {
             return _projectRepository.GetProject(id);
         }
@@ -21,7 +21,7 @@ namespace ClientManagement.Core.Services
         {
             return _projectRepository.GetAllProjects();
         }
-        public List<Employee> GetEmployeeListForProject(int ProjectId)
+        public List<Employee> GetEmployeeListForProject(Guid ProjectId)
         {
             var project = _projectRepository.GetProject(ProjectId);
             return project.Employees.ToList();
@@ -35,7 +35,7 @@ namespace ClientManagement.Core.Services
                 _projectRepository.Update(project);
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             _projectRepository.Delete(id);
         }

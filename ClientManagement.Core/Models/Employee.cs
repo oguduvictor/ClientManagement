@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ClientManagement.Core.Models
 {
@@ -10,15 +9,11 @@ namespace ClientManagement.Core.Models
         {
             Projects = new List<Project>();
         }
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None) ]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public decimal Salary { get; set; }
-        public int SkillLevel { get; set; }
         public Gender Gender { get; set; }
-        public virtual ICollection<Project> Projects { get; set; }
         public string UserId { get; set; }
+        public virtual ICollection<Project> Projects { get; set; }
     }
 }

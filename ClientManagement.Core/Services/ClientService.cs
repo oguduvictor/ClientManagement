@@ -1,5 +1,6 @@
 ﻿using ClientManagement.Core.Data.Repositories;
 using ClientManagement.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,7 +15,7 @@ namespace ClientManagement.Core.Services
             _clientRepository = clientRepository;
         }
 
-        public Client GetClient(int ClientId)
+        public Client GetClient(Guid ClientId)
         {
             return _clientRepository.GetClient(ClientId);
         }
@@ -22,7 +23,7 @@ namespace ClientManagement.Core.Services
         {
             return _clientRepository.GetAllClients();
         }
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             _clientRepository.Delete(id);
         }
@@ -34,12 +35,12 @@ namespace ClientManagement.Core.Services
             else
                 _clientRepository.Update(client);
         }
-        public void AddProject(Project project, int clientId)
+        public void AddProject(Project project, Guid clientId)
         {
             var client = GetClient(clientId);
             client.Projects.Add(project);
         }
-        public List<Project> GetClientProjects(int ClientId)
+        public List<Project> GetClientProjects(Guid ClientId)
         {
             var client = GetClient(ClientId);
             return client.Projects.ToList();

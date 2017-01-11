@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using ClientManagement.Core.Data.Db;
 using ClientManagement.Core.Models;
 using ClientManagement.Core.Services;
+using System;
 
 namespace ClientManagement.Web.Controllers
 {
@@ -36,13 +31,13 @@ namespace ClientManagement.Web.Controllers
         }
 
         // GET: Project/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var project = _projectService.GetProject(id.Value);
+            var project = _projectService.GetProject(id);
             if (project == null)
             {
                 return HttpNotFound();
@@ -52,7 +47,7 @@ namespace ClientManagement.Web.Controllers
             return View(project);
         }
 
-        public ActionResult ProjectEmployees(int id)
+        public ActionResult ProjectEmployees(Guid id)
         {
             var project = _projectService.GetProject(id);
             var projectEmployees = _projectService.GetEmployeeListForProject(id);
@@ -74,6 +69,7 @@ namespace ClientManagement.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                project.Id = Guid.NewGuid();
                 _projectService.Save(project);
                 return RedirectToAction("Index");
             }
@@ -82,13 +78,13 @@ namespace ClientManagement.Web.Controllers
         }
 
         // GET: Project/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var project = _projectService.GetProject(id.Value);
+            var project = _projectService.GetProject(id);
             
             if (project == null)
             {
@@ -100,7 +96,7 @@ namespace ClientManagement.Web.Controllers
         // POST: Project/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Description,ClientId,ProjectStatus")] Project project)
+        public ActionResult Edit([Bind(Include = "Title,Description,ClientId,ProjectStatus")] Project project)
         {
             if (ModelState.IsValid)
             {
@@ -112,13 +108,13 @@ namespace ClientManagement.Web.Controllers
         }
 
         // GET: Project/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var project = _projectService.GetProject(id.Value);
+            var project = _projectService.GetProject(id);
             if (project == null)
             {
                 return HttpNotFound();
@@ -129,7 +125,7 @@ namespace ClientManagement.Web.Controllers
         // POST: Project/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(Guid id)
         {
             _projectService.Delete(id);
             return RedirectToAction("Index");

@@ -176,10 +176,6 @@
       <Project>{E7E9196A-68E8-43F5-AA13-983CA0600C1A}</Project>
       <Name>ClientManagement.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ClientManagement.Web\ClientManagement.Web.csproj">
-      <Project>{D15DD2ED-BADC-41DD-9F7F-445B157A86EB}</Project>
-      <Name>ClientManagement.Web</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

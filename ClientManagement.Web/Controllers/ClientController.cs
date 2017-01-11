@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using ClientManagement.Core.Models;
 using ClientManagement.Core.Services;
+using System;
 
 namespace ClientManagement.Web.Controllers
 {
@@ -21,13 +22,13 @@ namespace ClientManagement.Web.Controllers
         }
 
         // GET: Client/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Client client = _clientService.GetClient(id.Value);
+            Client client = _clientService.GetClient(id);
             if (client == null)
             {
                 return HttpNotFound();
@@ -35,14 +36,14 @@ namespace ClientManagement.Web.Controllers
             return View(client);
         }
 
-        public ActionResult ClientProjects(int? id)
+        public ActionResult ClientProjects(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var projects = _clientService.GetClientProjects(id.Value);
-            ViewBag.ClientName = _clientService.GetClient(id.Value).Name;
+            var projects = _clientService.GetClientProjects(id);
+            ViewBag.ClientName = _clientService.GetClient(id).Name;
             return View(projects);
         }
 
@@ -59,6 +60,7 @@ namespace ClientManagement.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                client.Id = Guid.NewGuid();
                 _clientService.SaveClient(client);
                 return RedirectToAction("Index");
             }
@@ -67,13 +69,13 @@ namespace ClientManagement.Web.Controllers
         }
 
         // GET: Client/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var client = _clientService.GetClient(id.Value);
+            var client = _clientService.GetClient(id);
             if (client == null)
             {
                 return HttpNotFound();
@@ -84,7 +86,7 @@ namespace ClientManagement.Web.Controllers
         // POST: Client/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,EmailAddress")] Client client)
+        public ActionResult Edit([Bind(Include = "Name,EmailAddress")] Client client)
         {
             if (ModelState.IsValid)
             {
@@ -95,13 +97,13 @@ namespace ClientManagement.Web.Controllers
         }
 
         // GET: Client/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var client = _clientService.GetClient(id.Value);
+            var client = _clientService.GetClient(id);
             if (client == null)
             {
                 return HttpNotFound();
@@ -112,7 +114,7 @@ namespace ClientManagement.Web.Controllers
         // POST: Client/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(Guid id)
         {
             _clientService.Delete(id);
             return RedirectToAction("Index");

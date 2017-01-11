@@ -1,9 +1,9 @@
-﻿@model IEnumerable<ClientManagement.Core.Models.Project>
+﻿@model ClientManagement.Web.Models.EmployeeProject
 @{
     ViewBag.Title = "Remove Project From Employee";
 }
 <div class="row">
-    <h2 class="text-center text-capitalize">Remove A Project From @ViewBag.Employee.FirstName @ViewBag.Employee.LastName</h2>
+    <h2 class="text-center">Remove Project From @ViewBag.Employee.FirstName @ViewBag.Employee.LastName</h2>
 
     @using (Html.BeginForm())
     {
@@ -12,26 +12,19 @@
             <hr />
             <div class="form-group">
                 @Html.Label("Project Title", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <select class="form-control" name="ProjectId" id="ProjectId">
-                        <option selected="selected">----------</option>
-                        @foreach (var project in ViewBag.Projects)
-                        {
-                            <option value="@project.Id">@project.Title</option>
-                        }
-                    </select>
-                </div>
+                @Html.DropDownList("ProjectId", null, htmlAttributes: new { @class = "control-label col-md-8" })
+                @Html.ValidationMessageFor(model => model.ProjectId, "", new { @class = "text-danger" })
             </div>
-
-            <input type="text" name="EmployeeId" value="@ViewBag.employee.Id" hidden />
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Remove" class="btn btn-danger btn-block" />
-                </div>
-            </div>
-            <hr />
         </div>
+
+        <input type="text" name="EmployeeId" value="@ViewBag.employee.Id" hidden />
+        
+        <div class="form-group">
+            <div class="col-md-offset-4 col-md-8">
+                <input type="submit" value="Remove" class="btn btn-danger btn-block" />
+            </div>
+        </div>
+        <hr />
     }
 </div>
 

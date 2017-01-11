@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ClientManagement.Core.Models;
+using System.Data.Entity;
 
 namespace ClientManagement.Core.Data.Repositories
 {
@@ -26,11 +27,11 @@ namespace ClientManagement.Core.Data.Repositories
         }
         public List<Employee> GetAllEmployees()
         {
-            return _context.Employees.ToList();
+            return _context.Employees.Include(x => x.Projects).ToList();
         }
-        public Employee GetEmployee(int employeeId)
+        public Employee GetEmployee(Guid employeeId)
         {
-            return _context.Employees.Find(employeeId);
+            return GetAllEmployees().FirstOrDefault(x => x.Id == employeeId);
         }
         public void Update(Employee employee)
         {
@@ -39,48 +40,48 @@ namespace ClientManagement.Core.Data.Repositories
             dbEmployee.FirstName = employee.FirstName;
             dbEmployee.LastName = employee.LastName;
             dbEmployee.Gender = employee.Gender;
-            dbEmployee.Salary = employee.Salary;
-            dbEmployee.SkillLevel = employee.SkillLevel;
-                foreach (var project in employee.Projects)
+            foreach (var project in employee.Projects)
+            {
+                if (project.Id == null)
                 {
-                    if (project.Id == 0)
-                    {
-                        dbEmployee.Projects.Add(project);
-                        continue;
-                    }
-
-                    var dbProject = dbEmployee.Projects.FirstOrDefault(x => x.Id == project.Id);
-
-                    if (dbProject != null)
-                    {
-                        dbProject.Title = project.Title;
-                        dbProject.Description = project.Description;
-                        dbProject.ProjectStatus = project.ProjectStatus;
-                        dbProject.ClientId = dbProject.ClientId;
-                    }
+                    dbEmployee.Projects.Add(project);
+                    continue;
                 }
+
+                var dbProject = dbEmployee.Projects.FirstOrDefault(x => x.Id == project.Id);
+
+                if (dbProject != null)
+                {
+                    dbProject.Title = project.Title;
+                    dbProject.Description = project.Description;
+                    dbProject.ProjectStatus = project.ProjectStatus;
+                    dbProject.ClientId = dbProject.ClientId;
+                }
+            }
             
             _context.SaveChanges();
         }
 
-        public void AssignProjectToEmployee(int employeeId, int projectId)
+        public void AssignProjectToEmployee(Guid employeeId, Guid projectId)
         {
             var employee = GetEmployee(employeeId);
             var project = _context.Projects.Find(projectId);
             employee.Projects.Add(project);
+            _context.Entry(project).State = EntityState.Modified;
             _context.SaveChanges();
         }
 
-        public void RemoveProjectFromEmployee(int employeeId, int projectId)
+        public void RemoveProjectFromEmployee(Guid employeeId, Guid projectId)
         {
             var employee = _context.Employees.FirstOrDefault(x => x.Id == employeeId);
-            var project = _context.Projects.FirstOrDefault(x => x.Id == projectId);
+            var project = employee.Projects.FirstOrDefault(x => x.Id == projectId);
             employee.Projects.Remove(project);
+            _context.Entry(employee).State = EntityState.Deleted;
             _context.SaveChanges();
         }
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
-            var employee = _context.Employees.Find(id);
+            var employee = GetEmployee(id);
             _context.Employees.Remove(employee);
             _context.SaveChanges();
         }

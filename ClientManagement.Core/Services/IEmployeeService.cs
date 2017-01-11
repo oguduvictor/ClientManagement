@@ -1,17 +1,17 @@
 ﻿using ClientManagement.Core.Models;
+using System;
 using System.Collections.Generic;
 
 namespace ClientManagement.Core.Services
 {
     public interface IEmployeeService
     {
-        Employee GetEmployee(int employeeId);
+        Employee GetEmployee(Guid employeeId);
         List<Employee> GetAllEmployees();
         void Save(Employee employee);
-        List<Project> GetProjectListForEmployee(int employeeId);
-        void Delete(int id);
-        void AssignProjectToEmployee(int employeeId, int projectId);
-        void ReassignProject(int projectId, int FromEmployeeId, int ToEmployeeId);
-        void RemoveProjectFromEmployee(int employeeId, int projectId);
+        List<Project> GetProjectListForEmployee(Guid employeeId);
+        void Delete(Guid id);
+        void AssignProjectToEmployee(Guid employeeId, Guid projectId);
+        void RemoveProjectFromEmployee(Guid employeeId, Guid projectId);
     }
 }

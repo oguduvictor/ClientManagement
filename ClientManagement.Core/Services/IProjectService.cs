@@ -1,14 +1,15 @@
 ﻿using ClientManagement.Core.Models;
+using System;
 using System.Collections.Generic;
 
 namespace ClientManagement.Core.Services
 {
     public interface IProjectService
     {
-        Project GetProject(int id);
+        Project GetProject(Guid id);
         List<Project> GetAllProjects();
-        List<Employee> GetEmployeeListForProject(int ProjectId);
+        List<Employee> GetEmployeeListForProject(Guid ProjectId);
         void Save(Project project);
-        void Delete(int id);
+        void Delete(Guid id);
     }
 }

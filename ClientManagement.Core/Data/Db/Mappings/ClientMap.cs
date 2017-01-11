@@ -7,7 +7,7 @@ namespace ClientManagement.Core.Data.Db.Mappings
     {
         public ClientMap()
         {
-            ToTable("Client");
+            ToTable("Clients");
             HasKey(x => x.Id);
             
             Property(x => x.Name).HasColumnName("ClientName");

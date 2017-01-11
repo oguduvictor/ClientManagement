@@ -48,17 +48,17 @@ namespace ClientManagement.Tests.Core
         {
             context.Set<Employee>().AddRange(Data.Employees);
             context.SaveChanges();
-            var employee = repo.GetEmployee(31);
+            var employee = repo.GetEmployee(Data.Employee2Id);
             Assert.IsNotNull(employee);
         }
 
         [TestMethod, TestCategory("Integration Test")]
         public void Should_Be_Able_To_Assign_Project_To_Employee()
         {
-            repo.Create(Data.Employees[2]);
-            context.Set<Project>().AddRange(Data.project);
+            context.Set<Employee>().AddRange(Data.Employees);
+            context.Set<Project>().AddRange(Data.Projects);
             context.SaveChanges();
-            repo.AssignProjectToEmployee(20, 12);
+            repo.AssignProjectToEmployee(Data.Employee2Id, Data.Projects[1].Id);
         }
     }
 }

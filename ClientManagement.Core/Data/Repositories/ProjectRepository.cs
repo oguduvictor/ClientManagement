@@ -28,11 +28,11 @@ namespace ClientManagement.Core.Data.Repositories
         }
         public List<Project> GetAllProjects()
         {
-            return _context.Projects.ToList();
+            return _context.Projects.Include(x => x.Client).ToList();
         }
-        public Project GetProject(int id)
+        public Project GetProject(Guid id)
         {
-            return _context.Projects.Find(id);
+            return GetAllProjects().FirstOrDefault(x => x.Id == id);
         }
         public void Update(Project project)
         {
@@ -45,9 +45,9 @@ namespace ClientManagement.Core.Data.Repositories
             _context.SaveChanges();
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
-            var project = _context.Projects.Find(id);
+            var project = GetProject(id);
             _context.Projects.Remove(project);
             _context.Entry(project).State = EntityState.Deleted;
             _context.SaveChanges();

@@ -48,8 +48,9 @@ namespace ClientManagement.Tests.Core
             var employees = repo.GetAllEmployees();
 
             Assert.AreEqual(3, employees.Count);
-            Assert.AreEqual(30, employees.First().Id);
-            Assert.AreEqual(31, employees[1].Id);
+            Assert.AreEqual(Data.Employee1Id, employees.First().Id);
+            Assert.AreEqual(Data.Employee2Id, employees[1].Id);
+            Assert.AreEqual(Data.Employee3Id, employees[2].Id);
         }
     }
 }

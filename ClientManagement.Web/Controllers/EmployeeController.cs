@@ -2,13 +2,13 @@
 using ClientManagement.Core.Services;
 using ClientManagement.Web.Models;
 using Microsoft.AspNet.Identity;
+using System;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 
 namespace ClientManagement.Web.Controllers
 {
-    [HandleError]
     [Authorize]
     public class EmployeeController : Controller
     {
@@ -44,7 +44,7 @@ namespace ClientManagement.Web.Controllers
         }
 
         // GET: Employee/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(Guid id)
         {
             if (id == null)
             {
@@ -60,45 +60,62 @@ namespace ClientManagement.Web.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Manager")]
-        public ActionResult AssignProject(int? id)
+        public ActionResult AssignProject(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            employee = _employeeService.GetEmployee(id);
+            if (employee == null)
+            {
+                throw new Exception("Employee does not Exist!");
+            }
+
             var projects = _projectService.GetAllProjects();
-            ViewBag.Projects = projects;
-            ViewBag.Employee = _employeeService.GetEmployee(id.Value);
-            return View(projects);
+
+            ViewBag.Employee = employee;
+            ViewBag.ProjectId = new SelectList(projects, "Id", "Title");
+            return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Manager")]
         public ActionResult AssignProject(EmployeeProject employeeProject)
         {
-            var employeeId = employeeProject.EmployeeId;
-            var projectId = employeeProject.ProjectId;
-            _employeeService.AssignProjectToEmployee(employeeId, projectId);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                var employeeId = employeeProject.EmployeeId;
+                var projectId = employeeProject.ProjectId;
+                _employeeService.AssignProjectToEmployee(employeeId, projectId);
+                return RedirectToAction("Index");
+            }
+            return View();
         }
 
         [HttpGet]
         [Authorize(Roles = "Manager")]
-        public ActionResult RemoveProject(int? id)
+        public ActionResult RemoveProject(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var projects = _employeeService.GetEmployee(id.Value).Projects.ToList();
-            ViewBag.Projects = projects;
-            ViewBag.Employee = _employeeService.GetEmployee(id.Value);
-            return View(projects);
+            employee = _employeeService.GetEmployee(id);
+            if (employee == null)
+            {
+                throw new Exception("Employee does not Exist!");
+            }
+            ViewBag.Employee = employee;
+            var projects = _employeeService.GetEmployee(id).Projects.ToList();
+            ViewBag.ProjectId = new SelectList(projects, "Id", "Title");
+            return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Manager")]
-        public ActionResult RemoveProject([Bind(Include = "EmployeeId,ProjectId")] EmployeeProject employeeProject)
+        public ActionResult RemoveProject(EmployeeProject employeeProject)
         {
             var employeeId = employeeProject.EmployeeId;
             var projectId = employeeProject.ProjectId;
@@ -119,6 +136,7 @@ namespace ClientManagement.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                employee.Id = Guid.NewGuid();
                 _employeeService.Save(employee);
                 return RedirectToAction("Index");
             }
@@ -126,13 +144,13 @@ namespace ClientManagement.Web.Controllers
         }
 
         // GET: Employee/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            employee = _employeeService.GetEmployee(id.Value);
+            employee = _employeeService.GetEmployee(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -156,9 +174,13 @@ namespace ClientManagement.Web.Controllers
             }
         }
         
-        public ActionResult EmployeeProjects(int id)
+        public ActionResult EmployeeProjects(Guid id)
         {
             employee = _employeeService.GetEmployee(id);
+            if (employee == null)
+            {
+                throw new Exception("Employee does not Exist!");
+            }
             var projects = employee.Projects.ToList();
             return View(projects);
         }

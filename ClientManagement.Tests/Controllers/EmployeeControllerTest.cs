@@ -3,6 +3,7 @@ using ClientManagement.Core.Services;
 using Moq;
 using ClientManagement.Tests.Core;
 using ClientManagement.Web.Controllers;
+using System;
 
 namespace ClientManagement.Tests.Controllers
 {
@@ -17,8 +18,8 @@ namespace ClientManagement.Tests.Controllers
             var employees = Data.Employees;
             _employeeServiceMock = new Mock<IEmployeeService>();
             _employeeServiceMock.Setup(x => x.GetAllEmployees()).Returns(employees);
-            _employeeServiceMock.Setup(x => x.GetEmployee(It.IsAny<int>()))
-                .Returns((int input) =>
+            _employeeServiceMock.Setup(x => x.GetEmployee(It.IsAny<Guid>()))
+                .Returns((Guid input) =>
                 {
                     return employees.Find(x => x.Id == input);
                 });
@@ -28,7 +29,7 @@ namespace ClientManagement.Tests.Controllers
         public void Should_Be_Able_To_Retrieve_An_Employee()
         {
             var controller = new EmployeeController(_employeeServiceMock.Object);
-            var employee = controller.Details(It.IsAny<int>());
+            var employee = controller.Details(It.IsAny<Guid>());
             Assert.IsNotNull(employee);
         }
 

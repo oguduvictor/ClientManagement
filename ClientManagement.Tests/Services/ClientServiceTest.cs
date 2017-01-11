@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ClientManagement.Core.Data.Repositories;
 using ClientManagement.Tests.Core;
 using ClientManagement.Core.Models;
 using ClientManagement.Core.Services;
+using System;
 
 namespace ClientManagement.Tests.Services
 {
@@ -18,12 +18,12 @@ namespace ClientManagement.Tests.Services
         [TestInitialize]
         public void BeforeEach()
         {
-            var clients = Data.clients;
+            var clients = Data.Clients;
             _clientRepoMock = new Mock<IClientRepository>();
             _clientRepoMock.Setup(x => x.GetAllClients()).Returns(clients);
             _clientRepoMock
-                .Setup(x => x.GetClient(It.IsAny<int>()))
-                .Returns((int input) =>
+                .Setup(x => x.GetClient(It.IsAny<Guid>()))
+                .Returns((Guid input) =>
             {
                 return clients.FirstOrDefault(x => x.Id == input);
             });
@@ -37,13 +37,13 @@ namespace ClientManagement.Tests.Services
         {
             var clients = _clientService.GetAllClients();
             
-            Assert.AreEqual(1, clients.Count);
+            Assert.AreEqual(2, clients.Count);
         }
 
         [TestMethod, TestCategory("Unit Test")]
         public void Should_Be_Able_To_Get_A_Client()
         {
-            var client = _clientService.GetClient(1);
+            var client = _clientService.GetClient(Data.Client2Id);
 
             Assert.IsNotNull(client);
         }
@@ -51,21 +51,27 @@ namespace ClientManagement.Tests.Services
         [TestMethod, TestCategory("Unit Test")]
         public void Should_Be_Able_To_Save_Client()
         {
-            var client = Data.clients[0];
+            var client = Data.Clients[0];
             _clientService.SaveClient(client);
         }
 
         [TestMethod, TestCategory("Unit Test")]
         public void Should_Be_Able_To_Add_Project_To_Client()
         {
-            var project = Data.project[0];
-            _clientService.AddProject(project, 1);
+            var project = Data.Projects[0];
+            _clientService.AddProject(project, Data.Client1Id);
         }
 
         [TestMethod, TestCategory("Unit Test")]
         public void Should_Be_Able_To_Retrieve_Projects_For_Client()
         {
-            var projects = _clientService.GetClientProjects(1);
+            var project = Data.Projects[0];
+            _clientService.AddProject(project, Data.Client1Id);
+
+            project = Data.Projects[1];
+            _clientService.AddProject(project, Data.Client1Id);
+
+            var projects = _clientService.GetClientProjects(Data.Client1Id);
             
             Assert.AreEqual(2, projects.Count);
         }

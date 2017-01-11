@@ -52,7 +52,7 @@ namespace ClientManagement.Core.Data.Repositories
             return _employees;
         }
 
-        public Employee GetEmployee(int id)
+        public Employee GetEmployee(Guid id)
         {
             var employees = GetAllEmployees();
             var employee = employees.FirstOrDefault(x => x.Id == x.Id);
@@ -70,8 +70,6 @@ namespace ClientManagement.Core.Data.Repositories
 
             employeeEntity.FirstName = employee.FirstName;
             employeeEntity.LastName = employee.LastName;
-            employeeEntity.Salary = employee.Salary;
-            employeeEntity.SkillLevel = employee.SkillLevel;
             employeeEntity.Gender = employee.Gender;
 
             PersistEmployees();
@@ -94,7 +92,7 @@ namespace ClientManagement.Core.Data.Repositories
             }
         }
 
-        public void AssignProjectToEmployee(int employeeId, int projectId)
+        public void AssignProjectToEmployee(Guid employeeId, Guid projectId)
         {
             var Projects = GetAllProjects();
             var project = Projects.FirstOrDefault(x => x.Id == projectId);
@@ -129,7 +127,7 @@ namespace ClientManagement.Core.Data.Repositories
 
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             throw new NotImplementedException();
         }

@@ -14,7 +14,7 @@ namespace ClientManagement.Core.Services
         {
             _employeeRepository = employeeRepository;
         }
-        public Employee GetEmployee(int employeeId)
+        public Employee GetEmployee(Guid employeeId)
         {
             return _employeeRepository.GetEmployee(employeeId);
         }
@@ -25,13 +25,12 @@ namespace ClientManagement.Core.Services
         public void Save(Employee employee)
         {
             var dbEmployee = _employeeRepository.GetEmployee(employee.Id);
-            employee.Projects = new List<Project>();
             if (dbEmployee == null)
                 _employeeRepository.Create(employee);
             else
                 _employeeRepository.Update(employee);
         }
-        public List<Project> GetProjectListForEmployee(int employeeId)
+        public List<Project> GetProjectListForEmployee(Guid employeeId)
         {
             var employee = _employeeRepository.GetEmployee(employeeId);
             if (employee == null)
@@ -40,28 +39,23 @@ namespace ClientManagement.Core.Services
             }
             return employee.Projects.ToList();
         }
-        public void AssignProjectToEmployee(int employeeId, int projectId)
+        public void AssignProjectToEmployee(Guid employeeId, Guid projectId)
         {
             _employeeRepository.AssignProjectToEmployee(employeeId, projectId);
         }
-        public void DeleteEmployee(int id)
+        public void DeleteEmployee(Guid id)
         {
             _employeeRepository.Delete(id);
         }
 
-        public void RemoveProjectFromEmployee(int employeeId, int projectId)
+        public void RemoveProjectFromEmployee(Guid employeeId, Guid projectId)
         {
             var employee = GetEmployee(employeeId);
             var project = employee.Projects.FirstOrDefault(x => x.Id == projectId);
             employee.Projects.Remove(project);
         }
-        public void ReassignProject(int projectId, int FromEmployeeId, int ToEmployeeId)
-        {
-            AssignProjectToEmployee(ToEmployeeId, projectId);
-            RemoveProjectFromEmployee(FromEmployeeId, projectId);
-        }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             _employeeRepository.Delete(id);
         }

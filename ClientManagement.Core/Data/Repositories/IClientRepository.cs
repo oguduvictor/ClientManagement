@@ -1,4 +1,5 @@
 ﻿using ClientManagement.Core.Models;
+using System;
 using System.Collections.Generic;
 
 namespace ClientManagement.Core.Data.Repositories
@@ -6,9 +7,9 @@ namespace ClientManagement.Core.Data.Repositories
     public interface IClientRepository
     {
         void Create(Client client);
-        Client GetClient(int id);
+        Client GetClient(Guid id);
         List<Client> GetAllClients();
         void Update(Client client);
-        void Delete(int id);
+        void Delete(Guid id);
     }
 }

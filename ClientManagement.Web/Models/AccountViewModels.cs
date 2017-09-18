@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ClientManagement.Core.Models;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ClientManagement.Web.Models
@@ -65,10 +66,6 @@ namespace ClientManagement.Web.Models
     public class RegisterViewModel
     {
         [Required]
-        [Display(Name = "UserRoles")]
-        public string UserRoles { get; set; }
-
-        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
@@ -76,6 +73,16 @@ namespace ClientManagement.Web.Models
         [Required]
         [Display(Name = "UserName")]
         public string UserName { get; set; }
+
+
+        [Required, Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Required, Display(Name = "Last Name")]
+        public string LastName { get; set; }
+        
+        [Required, Range(1, int.MaxValue, ErrorMessage = "Select a Gender")]
+        public Gender Gender { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]

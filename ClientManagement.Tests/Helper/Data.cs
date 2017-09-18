@@ -53,11 +53,11 @@ namespace ClientManagement.Tests.Core
                 return new List<Project>
                 {
                    new Project { Id = new Guid ("6E1AF9E0-E868-4DEA-9DB6-600960D5DB3A") , Title = "Client Management", Description = "Client management software for consulting firm",
-                   ProjectStatus = ProjectStatus.NotStarted, Client = Clients[0] },
+                   Status = ProjectStatus.NotStarted, Client = Clients[0] },
                    new Project { Id = new Guid("AED89B56-9AAC-4EF3-A2DA-9CB386DB5064"), Title = "Health Tutor", Description = "Software for health-related issues",
-                   ProjectStatus = ProjectStatus.InProgress, Client = Clients[1] },
+                   Status = ProjectStatus.InProgress, Client = Clients[1] },
                    new Project { Id = new Guid("CEFA576C-C325-4C9F-AE20-7FAB97E1C319"), Title = "Accounting Software", Description = "Accounting management software for consulting firm",
-                   ProjectStatus = ProjectStatus.InProgress, Client = new Client
+                   Status = ProjectStatus.InProgress, Client = new Client
                    { Id = new Guid("AED89B56-9AAC-4C9F-AE20-7FAB97E1C319"), Name = "HP", EmailAddress = "hp@hp.com" } }
                 };
             }

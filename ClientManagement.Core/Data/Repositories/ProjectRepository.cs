@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ClientManagement.Core.Data.Db;
+using ClientManagement.Core.Interfaces;
 using ClientManagement.Core.Models;
-using ClientManagement.Core.Data.Db;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace ClientManagement.Core.Data.Repositories
 {
@@ -20,34 +21,34 @@ namespace ClientManagement.Core.Data.Repositories
             _context = context;
             _externalContext = true;
         }
-       
-        public void Create(Project project)
+
+        public async Task Create(Project project)
         {
             _context.Projects.Add(project);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-        public List<Project> GetAllProjects()
+        public async Task<IEnumerable<Project>> GetAllProjects()
         {
-            return _context.Projects.Include(x => x.Client).ToList();
+            return await _context.Projects.Include(x => x.Client).ToListAsync();
         }
-        public Project GetProject(Guid id)
+        public async Task<Project> GetProject(Guid id)
         {
-            return GetAllProjects().FirstOrDefault(x => x.Id == id);
+            return await _context.Projects.FirstOrDefaultAsync(x => x.Id == id);
         }
-        public void Update(Project project)
+        public async Task Update(Project project)
         {
-            var dbProject = GetProject(project.Id);
+            var dbProject = await GetProject(project.Id);
 
             dbProject.Title = project.Title;
             dbProject.Description = project.Description;
-            dbProject.ProjectStatus = project.ProjectStatus;
+            dbProject.Status = project.Status;
 
             _context.SaveChanges();
         }
 
-        public void Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            var project = GetProject(id);
+            var project = await GetProject(id);
             _context.Projects.Remove(project);
             _context.Entry(project).State = EntityState.Deleted;
             _context.SaveChanges();

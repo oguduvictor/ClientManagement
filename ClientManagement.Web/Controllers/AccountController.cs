@@ -6,6 +6,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ClientManagement.Web.Models;
+using ClientManagement.Core.Models;
+using System;
+using ClientManagement.Core.Interfaces;
 
 namespace ClientManagement.Web.Controllers
 {
@@ -13,11 +16,20 @@ namespace ClientManagement.Web.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private IEmployeeService _employeeService;
+        private IUserContext _userContext;
         ApplicationDbContext context;
 
-        public AccountController()
+        //public AccountController()
+        //{
+        //    context = new ApplicationDbContext();
+        //}
+
+        public AccountController(ApplicationDbContext dbContext, IEmployeeService employeeService, IUserContext userContext)
         {
-            context = new ApplicationDbContext();
+            context = dbContext;
+            _employeeService = employeeService;
+            _userContext = userContext;
         }
         public ApplicationSignInManager SignInManager
         {
@@ -148,6 +160,16 @@ namespace ClientManagement.Web.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    var employee = new Employee
+                    {
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        Gender = model.Gender,
+                        Id = Guid.Parse(user.Id)
+                    };
+
+                    await _employeeService.Save(employee);
+
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
@@ -156,9 +178,9 @@ namespace ClientManagement.Web.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
-                    await SignInAsync(user, true);
-                    return RedirectToAction("Create", "Employee");
+                    await this.UserManager.AddToRoleAsync(user.Id, "Employee");
+                    //await SignInAsync(user, true);
+                    return Redirect("Home");
                 }
                 AddErrors(result);
             }
@@ -166,12 +188,12 @@ namespace ClientManagement.Web.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-        private async Task SignInAsync(ApplicationUser user, bool isPersistent)
-        {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-            AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
-        }
+        //private async Task SignInAsync(ApplicationUser user, bool isPersistent)
+        //{
+        //    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+        //    var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+        //    AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
+        //}
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]

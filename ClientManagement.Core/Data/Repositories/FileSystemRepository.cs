@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ClientManagement.Core.Interfaces;
 using ClientManagement.Core.Models;
-using System.Configuration;
-using System.Threading;
-using System.IO;
-using ClientManagement.Core.Data.Db;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using static Newtonsoft.Json.JsonConvert;
 
 namespace ClientManagement.Core.Data.Repositories
@@ -16,22 +15,22 @@ namespace ClientManagement.Core.Data.Repositories
     public class FileSystemRepository : IEmployeeRepository
     {
         private readonly string FILE_PATH = ConfigurationManager.AppSettings["ClientEmployeeFilePath"];
-        private List<Employee> _employees;
+        private IEnumerable<Employee> _employees;
         private static ReaderWriterLockSlim _readerWriterLock = new ReaderWriterLockSlim();
         private List<Project> _projects;
 
-        public void Create(Employee employee)
+        public async Task Create(Employee employee)
         {
-            var employees = GetAllEmployees();
-            
+            var employees = (await GetAllEmployees()).ToList();
+
             employees.Add(employee);
-            PersistEmployees();
+            await PersistEmployees();
         }
 
-        public List<Employee> GetAllEmployees()
+        public Task<IEnumerable<Employee>> GetAllEmployees()
         {
             if (_employees != null)
-                return _employees;
+                return Task.FromResult(_employees);
 
             _readerWriterLock.EnterReadLock();
 
@@ -49,20 +48,20 @@ namespace ClientManagement.Core.Data.Repositories
             _employees = DeserializeObject<List<Employee>>(employeesJson)
                             ?? new List<Employee>();
 
-            return _employees;
+            return Task.FromResult(_employees);
         }
 
-        public Employee GetEmployee(Guid id)
+        public async Task<Employee> GetEmployee(Guid id)
         {
-            var employees = GetAllEmployees();
+            var employees = await GetAllEmployees();
             var employee = employees.FirstOrDefault(x => x.Id == x.Id);
 
             return employee;
         }
 
-        public void Update(Employee employee)
+        public async Task Update(Employee employee)
         {
-            var employees = GetAllEmployees();
+            var employees = await GetAllEmployees();
             var employeeEntity = employees.FirstOrDefault(x => x.Id == employee.Id);
 
             if (employeeEntity == null)
@@ -72,12 +71,12 @@ namespace ClientManagement.Core.Data.Repositories
             employeeEntity.LastName = employee.LastName;
             employeeEntity.Gender = employee.Gender;
 
-            PersistEmployees();
+            await PersistEmployees();
         }
 
-        private void PersistEmployees()
+        private async Task PersistEmployees()
         {
-            List<Employee> employees = GetAllEmployees();
+            List<Employee> employees = (await GetAllEmployees()).ToList();
             var employeesJson = SerializeObject(employees, Formatting.Indented);
 
             _readerWriterLock.EnterWriteLock();
@@ -92,15 +91,15 @@ namespace ClientManagement.Core.Data.Repositories
             }
         }
 
-        public void AssignProjectToEmployee(Guid employeeId, Guid projectId)
+        public async Task AssignProjectToEmployee(Guid employeeId, Guid projectId)
         {
             var Projects = GetAllProjects();
             var project = Projects.FirstOrDefault(x => x.Id == projectId);
-            var employee = GetEmployee(employeeId);
+            var employee = await GetEmployee(employeeId);
 
             employee.Projects.Add(project);
 
-            PersistEmployees();
+            await PersistEmployees();
         }
 
         public List<Project> GetAllProjects()
@@ -127,7 +126,7 @@ namespace ClientManagement.Core.Data.Repositories
 
         }
 
-        public void Delete(Guid id)
+        public Task Delete(Guid id)
         {
             throw new NotImplementedException();
         }

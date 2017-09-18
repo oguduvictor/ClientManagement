@@ -1,8 +1,9 @@
-﻿using ClientManagement.Core.Data.Repositories;
+﻿using ClientManagement.Core.Interfaces;
 using ClientManagement.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ClientManagement.Core.Services
 {
@@ -15,34 +16,34 @@ namespace ClientManagement.Core.Services
             _clientRepository = clientRepository;
         }
 
-        public Client GetClient(Guid ClientId)
+        public async Task<Client> GetClient(Guid ClientId)
         {
-            return _clientRepository.GetClient(ClientId);
+            return await _clientRepository.GetClient(ClientId);
         }
-        public List<Client> GetAllClients()
+        public async Task<IEnumerable<Client>> GetAllClients()
         {
-            return _clientRepository.GetAllClients();
+            return await _clientRepository.GetAllClients();
         }
-        public void Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            _clientRepository.Delete(id);
+            await _clientRepository.Delete(id);
         }
-        public void SaveClient(Client client)
+        public async Task SaveClient(Client client)
         {
-            var dbClient = GetClient(client.Id);
+            var dbClient = await GetClient(client.Id);
             if (dbClient == null)
-                _clientRepository.Create(client);
+                await _clientRepository.Create(client);
             else
-                _clientRepository.Update(client);
+                await _clientRepository.Update(client);
         }
-        public void AddProject(Project project, Guid clientId)
+        public async Task AddProject(Project project, Guid clientId)
         {
-            var client = GetClient(clientId);
+            var client = await GetClient(clientId);
             client.Projects.Add(project);
         }
-        public List<Project> GetClientProjects(Guid ClientId)
+        public async Task<IEnumerable<Project>> GetClientProjects(Guid ClientId)
         {
-            var client = GetClient(ClientId);
+            var client = await GetClient(ClientId);
             return client.Projects.ToList();
         }
     }

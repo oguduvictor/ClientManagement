@@ -1,11 +1,12 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ClientManagement.Core.Data.Repositories;
-using Moq;
-using ClientManagement.Tests.Core;
-using System.Linq;
-using ClientManagement.Core.Services;
+﻿using ClientManagement.Core.Interfaces;
 using ClientManagement.Core.Models;
+using ClientManagement.Core.Services;
+using ClientManagement.Tests.Core;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ClientManagement.Tests.Services
 {
@@ -21,10 +22,10 @@ namespace ClientManagement.Tests.Services
             var employees = Data.Employees;
 
             _employeeRepoMock = new Mock<IEmployeeRepository>();
-            _employeeRepoMock.Setup(x => x.GetAllEmployees()).Returns(employees);
+            _employeeRepoMock.Setup(x => x.GetAllEmployees()).ReturnsAsync(employees);
             _employeeRepoMock
                 .Setup(x => x.GetEmployee(It.IsAny<Guid>()))
-                .Returns((Guid input) =>
+                .ReturnsAsync((Guid input) =>
                 {
                     return employees.FirstOrDefault(x => x.Id == input);
                 });
@@ -32,59 +33,59 @@ namespace ClientManagement.Tests.Services
             _employeeRepoMock.Setup(x => x.Update(It.IsAny<Employee>()));
             _employeeService = new EmployeeService(_employeeRepoMock.Object);
         }
-        
+
         [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Retrieve_An_Employee()
+        public async Task Should_Be_Able_To_Retrieve_An_Employee()
         {
-            var employee = _employeeService.GetEmployee(Data.Employee1Id);
+            var employee = await _employeeService.GetEmployee(Data.Employee1Id);
 
             Assert.IsNotNull(employee);
             Assert.AreEqual("James", employee.FirstName);
         }
 
         [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Retrieve_All_Employees()
+        public async Task Should_Be_Able_To_Retrieve_All_Employees()
         {
-            var employees = _employeeService.GetAllEmployees();
+            var employees = await _employeeService.GetAllEmployees();
 
-            Assert.AreEqual(3, employees.Count);
+            Assert.AreEqual(3, employees.Count());
         }
 
         [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Retrieve_All_Projects_For_An_Employee()
+        public async Task Should_Be_Able_To_Retrieve_All_Projects_For_An_Employee()
         {
-            var employee = _employeeService.GetEmployee(Data.Employee1Id);
+            var employee = await _employeeService.GetEmployee(Data.Employee1Id);
             employee.Projects.Add(Data.Projects[0]);
             employee.Projects.Add(Data.Projects[1]);
-            var projects = _employeeService.GetProjectListForEmployee(Data.Employee1Id);
+            var projects = await _employeeService.GetProjectListForEmployee(Data.Employee1Id);
 
-            Assert.AreEqual(2, projects.Count);
+            Assert.AreEqual(2, projects.Count());
         }
 
         [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Assign_Project_To_Employee()
+        public async Task Should_Be_Able_To_Assign_Project_To_Employee()
         {
             var projectId = Data.Projects[0].Id;
             var employeeId = Data.Employee3Id;
-            _employeeService.AssignProjectToEmployee(employeeId, projectId);
+            await _employeeService.AssignProjectToEmployee(employeeId, projectId);
         }
 
         [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Remove_Project_From_Employee()
+        public async Task Should_Be_Able_To_Remove_Project_From_Employee()
         {
-            var employee = _employeeService.GetEmployee(Data.Employees[2].Id);
+            var employee = await _employeeService.GetEmployee(Data.Employees[2].Id);
             employee.Projects.Add(Data.Projects[0]);
             var projectId = Data.Projects[0].Id;
             Assert.AreEqual(1, employee.Projects.Count);
-            _employeeService.RemoveProjectFromEmployee(employee.Id, projectId);
+            await _employeeService.RemoveProjectFromEmployee(employee.Id, projectId);
             Assert.AreEqual(0, employee.Projects.Count);
         }
 
         [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Save_Employee()
+        public async Task Should_Be_Able_To_Save_Employee()
         {
-            _employeeService.Save(Data.Employees[0]);
-            var employee = _employeeService.GetEmployee(Data.Employee1Id);
+            await _employeeService.Save(Data.Employees[0]);
+            var employee = await _employeeService.GetEmployee(Data.Employee1Id);
             Assert.IsNotNull(employee);
         }
     }

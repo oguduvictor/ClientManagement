@@ -9,10 +9,6 @@ namespace ClientManagement.Core.Data.Db.Mappings
         {
             ToTable("Projects");
             HasKey(x => x.Id);
-            
-            Property(x => x.Title).HasColumnName("ProjectTitle");
-            Property(x => x.Description).HasColumnName("ProjectDescription");
-            
         }
     }
 }

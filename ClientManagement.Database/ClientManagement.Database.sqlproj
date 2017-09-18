@@ -109,6 +109,7 @@
     <Folder Include="Properties" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Scripts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Clients.sql">
@@ -151,5 +152,13 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
+    <Build Include="dbo\Tables\ProjectStatus.sql" />
+    <Build Include="dbo\Tables\Gender.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="ClientManagement.Database.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="dbo\Scripts\PostDeployment.sql" />
   </ItemGroup>
 </Project>

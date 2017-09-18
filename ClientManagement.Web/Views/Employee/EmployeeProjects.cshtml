@@ -4,7 +4,7 @@
     ViewBag.Title = "EmployeeProjects";
 }
 
-<h2>EmployeeProjects</h2>
+<h2>Employee Projects</h2>
 
 <table class="table table-striped table-responsive table-hover table-condensed">
     <tr>
@@ -15,7 +15,7 @@
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ProjectStatus)
+            @Html.DisplayNameFor(model => model.Status)
         </th>
         <th></th>
     </tr>
@@ -30,7 +30,7 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProjectStatus)
+                @Html.DisplayFor(modelItem => item.Status)
             </td>
         </tr>
     }

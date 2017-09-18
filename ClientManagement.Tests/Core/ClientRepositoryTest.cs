@@ -3,6 +3,8 @@ using ClientManagement.Core.Data.Db;
 using ClientManagement.Core.Data.Repositories;
 using ClientManagement.Core.Models;
 using System.Data.Entity;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace ClientManagement.Tests.Core
 {
@@ -28,28 +30,28 @@ namespace ClientManagement.Tests.Core
         }
 
         [TestMethod, TestCategory("Integration Test")]
-        public void Should_Be_Able_To_Add_Client_And_Save_To_Db()
+        public async Task Should_Be_Able_To_Add_Client_And_Save_To_Db()
         {
-            repo.Create(Data.Clients[0]);
-            context.SaveChanges();
+            await repo.Create(Data.Clients[0]);
+            await context.SaveChangesAsync();
         }
 
         [TestMethod, TestCategory("Integration Test")]
-        public void Should_Be_Able_To_Get_All_Clients()
+        public async Task Should_Be_Able_To_Get_All_Clients()
         {
             context.Set<Client>().AddRange(Data.Clients);
             context.SaveChanges();
-            var clients = repo.GetAllClients();
+            var clients = await repo.GetAllClients();
 
-            Assert.AreEqual(2, clients.Count);
+            Assert.AreEqual(2, clients.Count());
         }
 
         [TestMethod, TestCategory("Integration Test")]
-        public void Should_Be_Able_To_Get_A_Client()
+        public async Task Should_Be_Able_To_Get_A_Client()
         {
             context.Set<Client>().AddRange(Data.Clients);
             context.SaveChanges();
-            var client = repo.GetClient(Data.Client1Id);
+            var client = await repo.GetClient(Data.Client1Id);
 
             Assert.IsNotNull(client);
         }

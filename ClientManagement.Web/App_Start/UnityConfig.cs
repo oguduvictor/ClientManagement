@@ -1,8 +1,9 @@
-using System;
-using Microsoft.Practices.Unity;
-using Microsoft.Practices.Unity.Configuration;
-using ClientManagement.Core.Services;
 using ClientManagement.Core.Data.Repositories;
+using ClientManagement.Core.Interfaces;
+using ClientManagement.Core.Providers;
+using ClientManagement.Core.Services;
+using Microsoft.Practices.Unity;
+using System;
 
 namespace ClientManagement.Web.App_Start
 {
@@ -36,12 +37,11 @@ namespace ClientManagement.Web.App_Start
         {
             // NOTE: To load from web.config uncomment the line below. Make sure to add a Microsoft.Practices.Unity.Configuration to the using statements.
             // container.LoadConfiguration();
-
-            // TODO: Register your types here
-            // container.RegisterType<IProductRepository, ProductRepository>();
+            
             container.RegisterType<IEmployeeService, EmployeeService>();
             container.RegisterType<IClientService, ClientService>();
             container.RegisterType<IProjectService, ProjectService>();
+            container.RegisterType<IUserContext, UserContext>();
 
             container.RegisterType<IEmployeeRepository, EmployeeRepository>(new InjectionConstructor());
             container.RegisterType<IClientRepository, ClientRepository>(new InjectionConstructor());

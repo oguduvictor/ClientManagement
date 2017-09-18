@@ -1,11 +1,12 @@
 ﻿using ClientManagement.Core.Models;
-using ClientManagement.Core.Services;
+using ClientManagement.Core.Interfaces;
 using ClientManagement.Web.Models;
-using Microsoft.AspNet.Identity;
 using System;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using static ClientManagement.Core.Constants.RolesConstants;
 
 namespace ClientManagement.Web.Controllers
 {
@@ -24,133 +25,104 @@ namespace ClientManagement.Web.Controllers
         {
             _employeeService = employeeService;
         }
-        // GET: Employee
-        public ActionResult Index()
-        {
-            if (User.IsInRole("Manager"))
-            {
-                var employees = _employeeService.GetAllEmployees();
-                return View(employees);
-            }
-            else
-            {
-                employee = _employeeService.GetAllEmployees().FirstOrDefault(x => x.UserId == User.Identity.GetUserId());
-                if (employee == null)
-                    return RedirectToAction("Create", "Employee");
 
-                var employeeId = employee.Id;
-                return RedirectToAction("EmployeeProjects/" + employeeId, "Employee");
-            }
+        [Authorize(Roles = Manager)]
+        public async Task<ActionResult> Index()
+        {
+            var employees = await _employeeService.GetAllEmployees();
+
+            return View(employees);
         }
 
         // GET: Employee/Details/5
-        public ActionResult Details(Guid id)
+        public async Task<ActionResult> Details(Guid id)
         {
             if (id == null)
             {
-                employee = _employeeService.GetAllEmployees().Find(x => x.UserId == User.Identity.GetUserId());
+                employee = await _employeeService.GetEmployee(id);
             }
             if (employee == null)
             {
                 return RedirectToAction("Create", "Employee");
             }
-            ViewBag.Employee = User.Identity.GetUserName();
+
             return View(employee);
         }
 
         [HttpGet]
-        [Authorize(Roles = "Manager")]
-        public ActionResult AssignProject(Guid id)
+        [Authorize(Roles = Manager)]
+        public async Task<ActionResult> AssignProject(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            employee = _employeeService.GetEmployee(id);
+            employee = await _employeeService.GetEmployee(id);
             if (employee == null)
             {
                 throw new Exception("Employee does not Exist!");
             }
 
-            var projects = _projectService.GetAllProjects();
+            var projects = await _projectService.GetAllProjects();
 
             ViewBag.Employee = employee;
             ViewBag.ProjectId = new SelectList(projects, "Id", "Title");
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
-        public ActionResult AssignProject(EmployeeProject employeeProject)
+        [Authorize(Roles = Manager)]
+        public async Task<ActionResult> AssignProject(EmployeeProject employeeProject)
         {
             if (ModelState.IsValid)
             {
                 var employeeId = employeeProject.EmployeeId;
                 var projectId = employeeProject.ProjectId;
-                _employeeService.AssignProjectToEmployee(employeeId, projectId);
+                await _employeeService.AssignProjectToEmployee(employeeId, projectId);
                 return RedirectToAction("Index");
             }
             return View();
         }
 
         [HttpGet]
-        [Authorize(Roles = "Manager")]
-        public ActionResult RemoveProject(Guid id)
+        [Authorize(Roles = Manager)]
+        public async Task<ActionResult> RemoveProject(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            employee = _employeeService.GetEmployee(id);
+            employee = await _employeeService.GetEmployee(id);
             if (employee == null)
             {
                 throw new Exception("Employee does not Exist!");
             }
             ViewBag.Employee = employee;
-            var projects = _employeeService.GetEmployee(id).Projects.ToList();
+            var projects = (await _employeeService.GetEmployee(id)).Projects.ToList();
             ViewBag.ProjectId = new SelectList(projects, "Id", "Title");
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
-        public ActionResult RemoveProject(EmployeeProject employeeProject)
+        [Authorize(Roles = Manager)]
+        public async Task<ActionResult> RemoveProject(EmployeeProject employeeProject)
         {
             var employeeId = employeeProject.EmployeeId;
             var projectId = employeeProject.ProjectId;
-            _employeeService.RemoveProjectFromEmployee(employeeId, projectId);
+            await _employeeService.RemoveProjectFromEmployee(employeeId, projectId);
             return RedirectToAction("Index");
         }
 
-        // GET: Employee/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Employee/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include ="Id,FirstName,LastName,Salary,Gender,SkillLevel,UserId")] Employee employee)
-        {
-            if (ModelState.IsValid)
-            {
-                employee.Id = Guid.NewGuid();
-                _employeeService.Save(employee);
-                return RedirectToAction("Index");
-            }
-            return View(employee);
-        }
-
         // GET: Employee/Edit/5
-        public ActionResult Edit(Guid id)
+        public async Task<ActionResult> Edit(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            employee = _employeeService.GetEmployee(id);
+            employee = await _employeeService.GetEmployee(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -161,11 +133,11 @@ namespace ClientManagement.Web.Controllers
         // POST: Employee/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,FirstName,LastName,Salary,Gender,SkillLevel")] Employee employee)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,FirstName,LastName,Salary,Gender,SkillLevel")] Employee employee)
         {
             try
             {
-                _employeeService.Save(employee);
+                await _employeeService.Save(employee);
                 return RedirectToAction("Index");
             }
             catch
@@ -173,10 +145,10 @@ namespace ClientManagement.Web.Controllers
                 return View();
             }
         }
-        
-        public ActionResult EmployeeProjects(Guid id)
+
+        public async Task<ActionResult> EmployeeProjects(Guid id)
         {
-            employee = _employeeService.GetEmployee(id);
+            employee = await _employeeService.GetEmployee(id);
             if (employee == null)
             {
                 throw new Exception("Employee does not Exist!");

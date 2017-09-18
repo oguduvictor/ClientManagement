@@ -1,8 +1,9 @@
-﻿using ClientManagement.Core.Data.Repositories;
+﻿using ClientManagement.Core.Interfaces;
 using ClientManagement.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
+using System.Threading.Tasks;
 
 namespace ClientManagement.Core.Services
 {
@@ -13,31 +14,31 @@ namespace ClientManagement.Core.Services
         {
             _projectRepository = projectRepository;
         }
-        public Project GetProject(Guid id)
+        public async Task<Project> GetProject(Guid id)
         {
-            return _projectRepository.GetProject(id);
+            return await _projectRepository.GetProject(id);
         }
-        public List<Project> GetAllProjects()
+        public async Task<IEnumerable<Project>> GetAllProjects()
         {
-            return _projectRepository.GetAllProjects();
+            return await _projectRepository.GetAllProjects();
         }
-        public List<Employee> GetEmployeeListForProject(Guid ProjectId)
+        public async Task<IEnumerable<Employee>> GetEmployeeListForProject(Guid ProjectId)
         {
-            var project = _projectRepository.GetProject(ProjectId);
-            return project.Employees.ToList();
+            var project = await _projectRepository.GetProject(ProjectId);
+            return project.Employees;
         }
-        public void Save(Project project)
+        public async Task Save(Project project)
         {
-            var dbProject = _projectRepository.GetProject(project.Id);
+            var dbProject = await _projectRepository.GetProject(project.Id);
             if (dbProject == null)
-                _projectRepository.Create(project);
+                await _projectRepository.Create(project);
             else
-                _projectRepository.Update(project);
+                await _projectRepository.Update(project);
         }
 
-        public void Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            _projectRepository.Delete(id);
+            await _projectRepository.Delete(id);
         }
     }
 }

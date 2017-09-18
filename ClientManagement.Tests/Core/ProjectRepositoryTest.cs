@@ -2,6 +2,8 @@
 using ClientManagement.Core.Data.Repositories;
 using System.Data.Entity;
 using ClientManagement.Core.Data.Db;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace ClientManagement.Tests.Core
 {
@@ -27,28 +29,28 @@ namespace ClientManagement.Tests.Core
             txn.Dispose();
         }
         [TestMethod, TestCategory("Integration Test")]
-        public void Should_Be_Able_To_Add_Project_To_DB()
+        public async Task Should_Be_Able_To_Add_Project_To_DB()
         {
-            repo.Create(Data.Projects[0]);
+            await repo.Create(Data.Projects[0]);
             context.SaveChanges();
         }
 
         [TestMethod, TestCategory("Integration Test")]
-        public void Should_Be_Able_To_Get_All_Projects_From_DB()
+        public async Task Should_Be_Able_To_Get_All_Projects_From_DB()
         {
             context.Projects.AddRange(Data.Projects);
             context.SaveChanges();
-            var projects = repo.GetAllProjects();
+            var projects = await repo.GetAllProjects();
 
-            Assert.AreEqual(3, projects.Count);
+            Assert.AreEqual(3, projects.Count());
         }
 
         [TestMethod, TestCategory("Integration Test")]
-        public void Should_Be_Able_To_Get_A_Project_From_DB()
+        public async Task Should_Be_Able_To_Get_A_Project_From_DB()
         {
             context.Projects.AddRange(Data.Projects);
             context.SaveChanges();
-            var project = repo.GetProject(Data.Projects[1].Id);
+            var project = await repo.GetProject(Data.Projects[1].Id);
 
             Assert.IsNotNull(project);
         }

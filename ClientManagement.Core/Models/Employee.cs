@@ -13,7 +13,6 @@ namespace ClientManagement.Core.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public Gender Gender { get; set; }
-        public string UserId { get; set; }
         public virtual ICollection<Project> Projects { get; set; }
     }
 }

@@ -1,8 +1,9 @@
-﻿using ClientManagement.Core.Data.Repositories;
+﻿using ClientManagement.Core.Interfaces;
 using ClientManagement.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ClientManagement.Core.Services
 {
@@ -14,50 +15,50 @@ namespace ClientManagement.Core.Services
         {
             _employeeRepository = employeeRepository;
         }
-        public Employee GetEmployee(Guid employeeId)
+        public async Task<Employee> GetEmployee(Guid employeeId)
         {
-            return _employeeRepository.GetEmployee(employeeId);
+            return await _employeeRepository.GetEmployee(employeeId);
         }
-        public List<Employee> GetAllEmployees()
+        public async Task<IEnumerable<Employee>> GetAllEmployees()
         {
-            return _employeeRepository.GetAllEmployees().ToList();
+            return await _employeeRepository.GetAllEmployees();
         }
-        public void Save(Employee employee)
+        public async Task Save(Employee employee)
         {
-            var dbEmployee = _employeeRepository.GetEmployee(employee.Id);
+            var dbEmployee = await _employeeRepository.GetEmployee(employee.Id);
             if (dbEmployee == null)
-                _employeeRepository.Create(employee);
+                await _employeeRepository.Create(employee);
             else
-                _employeeRepository.Update(employee);
+                await _employeeRepository.Update(employee);
         }
-        public List<Project> GetProjectListForEmployee(Guid employeeId)
+        public async Task<IEnumerable<Project>> GetProjectListForEmployee(Guid employeeId)
         {
-            var employee = _employeeRepository.GetEmployee(employeeId);
+            var employee = await _employeeRepository.GetEmployee(employeeId);
             if (employee == null)
             {
                 throw new Exception("Employee does not exist");
             }
-            return employee.Projects.ToList();
+            return employee.Projects;
         }
-        public void AssignProjectToEmployee(Guid employeeId, Guid projectId)
+        public async Task AssignProjectToEmployee(Guid employeeId, Guid projectId)
         {
-            _employeeRepository.AssignProjectToEmployee(employeeId, projectId);
+            await _employeeRepository.AssignProjectToEmployee(employeeId, projectId);
         }
-        public void DeleteEmployee(Guid id)
+        public async Task DeleteEmployee(Guid id)
         {
-            _employeeRepository.Delete(id);
+            await _employeeRepository.Delete(id);
         }
 
-        public void RemoveProjectFromEmployee(Guid employeeId, Guid projectId)
+        public async Task RemoveProjectFromEmployee(Guid employeeId, Guid projectId)
         {
-            var employee = GetEmployee(employeeId);
+            var employee = await GetEmployee(employeeId);
             var project = employee.Projects.FirstOrDefault(x => x.Id == projectId);
             employee.Projects.Remove(project);
         }
 
-        public void Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            _employeeRepository.Delete(id);
+            await _employeeRepository.Delete(id);
         }
     }
 }

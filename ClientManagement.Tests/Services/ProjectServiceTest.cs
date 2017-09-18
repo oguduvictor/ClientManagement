@@ -1,11 +1,11 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using ClientManagement.Core.Data.Repositories;
+﻿using ClientManagement.Core.Interfaces;
 using ClientManagement.Core.Services;
 using ClientManagement.Tests.Core;
-using ClientManagement.Core.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ClientManagement.Tests.Services
 {
@@ -20,9 +20,9 @@ namespace ClientManagement.Tests.Services
         {
             var projects = Data.Projects;
             _projectRepoMock = new Mock<IProjectRepository>();
-            _projectRepoMock.Setup(x => x.GetAllProjects()).Returns(projects);
+            _projectRepoMock.Setup(x => x.GetAllProjects()).ReturnsAsync(projects);
             _projectRepoMock.Setup(x => x.GetProject(It.IsAny<Guid>()))
-                .Returns((Guid input) => 
+                .ReturnsAsync((Guid input) => 
                 {
                     return projects.FirstOrDefault(x => x.Id == input);
                 });
@@ -30,34 +30,34 @@ namespace ClientManagement.Tests.Services
         }
 
         [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Get_All_Projects()
+        public async Task Should_Be_Able_To_Get_All_Projects()
         {
-            var projects = _projectService.GetAllProjects();
+            var projects = await _projectService.GetAllProjects();
 
-            Assert.AreEqual(3, projects.Count);
+            Assert.AreEqual(3, projects.Count());
         }
 
         [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Retrieve_A_Project()
+        public async Task Should_Be_Able_To_Retrieve_A_Project()
         {
-            var project = _projectService.GetProject(Data.Projects[0].Id);
+            var project = await _projectService.GetProject(Data.Projects[0].Id);
 
             Assert.IsNotNull(project);
         }
 
         [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Get_All_Employees_For_A_Project()
+        public async Task Should_Be_Able_To_Get_All_Employees_For_A_Project()
         {
-            var employees = _projectService.GetEmployeeListForProject(Data.Projects[0].Id);
+            var employees = await _projectService.GetEmployeeListForProject(Data.Projects[0].Id);
 
             Assert.IsNotNull(employees);
         }
 
         [TestMethod, TestCategory("Unit Test")]
-        public void Should_Be_Able_To_Add_A_Project()
+        public async Task Should_Be_Able_To_Add_A_Project()
         {
             var project = Data.Projects[2];
-            _projectService.Save(project);
+            await _projectService.Save(project);
         }
     }
 }

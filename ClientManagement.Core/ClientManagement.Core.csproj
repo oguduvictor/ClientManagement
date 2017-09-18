@@ -48,6 +48,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
@@ -58,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\RolesConstants.cs" />
     <Compile Include="Data\Db\DbManagementContext.cs" />
     <Compile Include="Data\Db\Mappings\ClientMap.cs" />
     <Compile Include="Data\Db\Mappings\EmployeeMap.cs" />
@@ -65,21 +67,23 @@
     <Compile Include="Data\Repositories\ClientRepository.cs" />
     <Compile Include="Data\Repositories\EmployeeRepository.cs" />
     <Compile Include="Data\Repositories\FileSystemRepository.cs" />
-    <Compile Include="Data\Repositories\IClientRepository.cs" />
-    <Compile Include="Data\Repositories\IEmployeeRepository.cs" />
-    <Compile Include="Data\Repositories\IProjectRepository.cs" />
+    <Compile Include="Interfaces\IClientRepository.cs" />
+    <Compile Include="Interfaces\IEmployeeRepository.cs" />
+    <Compile Include="Interfaces\IProjectRepository.cs" />
     <Compile Include="Data\Repositories\ProjectRepository.cs" />
-    <Compile Include="Models\Gender.cs" />
+    <Compile Include="Interfaces\IUserContext.cs" />
+    <Compile Include="Enums\Gender.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\Project.cs" />
-    <Compile Include="Models\ProjectStatus.cs" />
+    <Compile Include="Enums\ProjectStatus.cs" />
+    <Compile Include="Enums\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ClientService.cs" />
     <Compile Include="Services\EmployeeService.cs" />
-    <Compile Include="Services\IClientService.cs" />
-    <Compile Include="Services\IEmployeeService.cs" />
-    <Compile Include="Services\IProjectService.cs" />
+    <Compile Include="Interfaces\IClientService.cs" />
+    <Compile Include="Interfaces\IEmployeeService.cs" />
+    <Compile Include="Interfaces\IProjectService.cs" />
     <Compile Include="Services\ProjectService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +95,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

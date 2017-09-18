@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using ClientManagement.Core.Data.Repositories;
+using System.Threading.Tasks;
 
 namespace ClientManagement.Tests.Core
 {
@@ -35,22 +36,22 @@ namespace ClientManagement.Tests.Core
         }
 
         [TestMethod, TestCategory("Integration Test")]
-        public void Should_Be_Able_To_Save_Employee()
+        public async Task Should_Be_Able_To_Save_Employee()
         {
             var repo = new FileSystemRepository();
-            repo.Create(Data.Employees[1]);
+            await repo.Create(Data.Employees[1]);
         }
 
         [TestMethod, TestCategory("Integration Test")]
-        public void Should_Be_Able_To_Read_All_Employees()
+        public async Task Should_Be_Able_To_Read_All_Employees()
         {
             var repo = new FileSystemRepository();
-            var employees = repo.GetAllEmployees();
+            var employees = await repo.GetAllEmployees();
 
-            Assert.AreEqual(3, employees.Count);
+            Assert.AreEqual(3, employees.Count());
             Assert.AreEqual(Data.Employee1Id, employees.First().Id);
-            Assert.AreEqual(Data.Employee2Id, employees[1].Id);
-            Assert.AreEqual(Data.Employee3Id, employees[2].Id);
+            Assert.AreEqual(Data.Employee2Id, employees.ElementAt(1).Id);
+            Assert.AreEqual(Data.Employee3Id, employees.ElementAt(2).Id);
         }
     }
 }

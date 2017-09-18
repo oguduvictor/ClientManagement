@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ClientManagement.Core.Data.Db;
+using ClientManagement.Core.Interfaces;
 using ClientManagement.Core.Models;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity;
-using ClientManagement.Core.Data.Db;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ClientManagement.Core.Data.Repositories
 {
@@ -22,26 +22,26 @@ namespace ClientManagement.Core.Data.Repositories
             _context = context;
             _externalContext = true;
         }
-        public void Create(Client client)
+        public async Task Create(Client client)
         {
             _context.Clients.Add(client);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-        public List<Client> GetAllClients()
+        public async Task<IEnumerable<Client>> GetAllClients()
         {
-            return _context.Clients.ToList();
+            return await _context.Clients.ToListAsync();
         }
-        public Client GetClient(Guid clientId)
+        public async Task<Client> GetClient(Guid clientId)
         {
-            return GetAllClients().FirstOrDefault(x => x.Id == clientId);
+            return await _context.Clients.FirstOrDefaultAsync(x => x.Id == clientId);
         }
-        public void Update(Client client)
+        public async Task Update(Client client)
         {
-            var dbClient = GetClient(client.Id);
+            var dbClient = await GetClient(client.Id);
 
             dbClient.Name = client.Name;
             dbClient.EmailAddress = client.EmailAddress;
-            
+
             foreach (var project in client.Projects)
             {
                 if (project.Id == null)
@@ -56,16 +56,16 @@ namespace ClientManagement.Core.Data.Repositories
                 {
                     dbProject.Title = project.Title;
                     dbProject.Description = project.Description;
-                    dbProject.ProjectStatus = project.ProjectStatus;
+                    dbProject.Status = project.Status;
                 }
             }
-            
+
             _context.SaveChanges();
         }
 
-        public void Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            var client = GetClient(id);
+            var client = await GetClient(id);
             _context.Clients.Remove(client);
             _context.SaveChanges();
         }

@@ -1,8 +1,9 @@
 ﻿using System.Net;
 using System.Web.Mvc;
 using ClientManagement.Core.Models;
-using ClientManagement.Core.Services;
 using System;
+using ClientManagement.Core.Interfaces;
+using System.Threading.Tasks;
 
 namespace ClientManagement.Web.Controllers
 {
@@ -15,20 +16,20 @@ namespace ClientManagement.Web.Controllers
             _clientService = clientService;
         }
         // GET: Client
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var clients = _clientService.GetAllClients();
+            var clients = await _clientService.GetAllClients();
             return View(clients);
         }
 
         // GET: Client/Details/5
-        public ActionResult Details(Guid id)
+        public async Task<ActionResult> Details(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Client client = _clientService.GetClient(id);
+            Client client = await _clientService.GetClient(id);
             if (client == null)
             {
                 return HttpNotFound();
@@ -36,14 +37,14 @@ namespace ClientManagement.Web.Controllers
             return View(client);
         }
 
-        public ActionResult ClientProjects(Guid id)
+        public async Task<ActionResult> ClientProjects(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var projects = _clientService.GetClientProjects(id);
-            ViewBag.ClientName = _clientService.GetClient(id).Name;
+            var projects = await _clientService.GetClientProjects(id);
+            ViewBag.ClientName = (await _clientService.GetClient(id)).Name;
             return View(projects);
         }
 
@@ -56,12 +57,12 @@ namespace ClientManagement.Web.Controllers
         // POST: Client/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,EmailAddress")] Client client)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,EmailAddress")] Client client)
         {
             if (ModelState.IsValid)
             {
                 client.Id = Guid.NewGuid();
-                _clientService.SaveClient(client);
+                await _clientService.SaveClient(client);
                 return RedirectToAction("Index");
             }
 
@@ -69,13 +70,13 @@ namespace ClientManagement.Web.Controllers
         }
 
         // GET: Client/Edit/5
-        public ActionResult Edit(Guid id)
+        public async Task<ActionResult> Edit(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var client = _clientService.GetClient(id);
+            var client = await _clientService.GetClient(id);
             if (client == null)
             {
                 return HttpNotFound();
@@ -86,24 +87,24 @@ namespace ClientManagement.Web.Controllers
         // POST: Client/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Name,EmailAddress")] Client client)
+        public async Task<ActionResult> Edit([Bind(Include = "Name,EmailAddress")] Client client)
         {
             if (ModelState.IsValid)
             {
-                _clientService.SaveClient(client);
+                await _clientService.SaveClient(client);
                 return RedirectToAction("Index");
             }
             return View(client);
         }
 
         // GET: Client/Delete/5
-        public ActionResult Delete(Guid id)
+        public async Task<ActionResult> Delete(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var client = _clientService.GetClient(id);
+            var client = await _clientService.GetClient(id);
             if (client == null)
             {
                 return HttpNotFound();
@@ -114,11 +115,11 @@ namespace ClientManagement.Web.Controllers
         // POST: Client/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(Guid id)
+        public async Task<ActionResult> DeleteConfirmed(Guid id)
         {
-            _clientService.Delete(id);
+            await _clientService.Delete(id);
             return RedirectToAction("Index");
         }
-        
+
     }
 }

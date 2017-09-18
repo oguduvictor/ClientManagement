@@ -1,41 +1,43 @@
 ﻿using ClientManagement.Core.Data.Db;
+using ClientManagement.Core.Interfaces;
+using ClientManagement.Core.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using ClientManagement.Core.Models;
 using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ClientManagement.Core.Data.Repositories
 {
     public class EmployeeRepository: IEmployeeRepository, IDisposable
     {
-        private readonly DbManagementContext _context;
+        private readonly DbManagementContext _dbContext;
         private readonly bool _externalContext;
         public EmployeeRepository()
         {
-            _context = new DbManagementContext();
+            _dbContext = new DbManagementContext();
         }
-        public EmployeeRepository(DbManagementContext context)
+        public EmployeeRepository(DbManagementContext dbContext)
         {
-            _context = context;
+            _dbContext = dbContext;
             _externalContext = true;
         }
-        public void Create(Employee employee)
+        public async Task Create(Employee employee)
         {
-            _context.Employees.Add(employee);
-            _context.SaveChanges();
+            _dbContext.Employees.Add(employee);
+            await _dbContext.SaveChangesAsync();
         }
-        public List<Employee> GetAllEmployees()
+        public async Task<IEnumerable<Employee>> GetAllEmployees()
         {
-            return _context.Employees.Include(x => x.Projects).ToList();
+            return await _dbContext.Employees.Include(x => x.Projects).ToListAsync();
         }
-        public Employee GetEmployee(Guid employeeId)
+        public async Task<Employee> GetEmployee(Guid employeeId)
         {
-            return GetAllEmployees().FirstOrDefault(x => x.Id == employeeId);
+            return await _dbContext.Employees.FirstOrDefaultAsync(x => x.Id == employeeId);
         }
-        public void Update(Employee employee)
+        public async Task Update(Employee employee)
         {
-            var dbEmployee = GetEmployee(employee.Id);
+            var dbEmployee = await GetEmployee(employee.Id);
 
             dbEmployee.FirstName = employee.FirstName;
             dbEmployee.LastName = employee.LastName;
@@ -54,44 +56,44 @@ namespace ClientManagement.Core.Data.Repositories
                 {
                     dbProject.Title = project.Title;
                     dbProject.Description = project.Description;
-                    dbProject.ProjectStatus = project.ProjectStatus;
+                    dbProject.Status = project.Status;
                     dbProject.ClientId = dbProject.ClientId;
                 }
             }
-            
-            _context.SaveChanges();
+
+            _dbContext.SaveChanges();
         }
 
-        public void AssignProjectToEmployee(Guid employeeId, Guid projectId)
+        public async Task AssignProjectToEmployee(Guid employeeId, Guid projectId)
         {
-            var employee = GetEmployee(employeeId);
-            var project = _context.Projects.Find(projectId);
+            var employee = await GetEmployee(employeeId);
+            var project = _dbContext.Projects.Find(projectId);
             employee.Projects.Add(project);
-            _context.Entry(project).State = EntityState.Modified;
-            _context.SaveChanges();
+            _dbContext.Entry(project).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void RemoveProjectFromEmployee(Guid employeeId, Guid projectId)
+        public async Task RemoveProjectFromEmployee(Guid employeeId, Guid projectId)
         {
-            var employee = _context.Employees.FirstOrDefault(x => x.Id == employeeId);
+            var employee = _dbContext.Employees.FirstOrDefault(x => x.Id == employeeId);
             var project = employee.Projects.FirstOrDefault(x => x.Id == projectId);
             employee.Projects.Remove(project);
-            _context.Entry(employee).State = EntityState.Deleted;
-            _context.SaveChanges();
+            _dbContext.Entry(employee).State = EntityState.Deleted;
+            await _dbContext.SaveChangesAsync();
         }
-        public void Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            var employee = GetEmployee(id);
-            _context.Employees.Remove(employee);
-            _context.SaveChanges();
+            var employee = await GetEmployee(id);
+            _dbContext.Employees.Remove(employee);
+            _dbContext.SaveChanges();
         }
 
         public void Dispose()
         {
-            if (_externalContext || _context == null)
+            if (_externalContext || _dbContext == null)
                 return;
 
-            _context.Dispose();
+            _dbContext.Dispose();
             GC.SuppressFinalize(this);
         }
     }

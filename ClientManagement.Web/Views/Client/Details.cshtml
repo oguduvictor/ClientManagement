@@ -1,34 +1,44 @@
 ﻿@model ClientManagement.Core.Models.Client
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Client Details";
 }
 
-<h2>Details</h2>
+<h2>Client - @Model.Name</h2>
+<hr />
 
-<div>
-    <h4>Client</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.EmailAddress)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.EmailAddress)
-        </dd>
-
-    </dl>
+<div class="row">
+    <ul class="col-md-8 list-group">
+        <li class="list-group-item"><h4>Name:<span class="pull-right">@Model.Name</span> </h4></li>
+        <li class="list-group-item"><h4>Email: <span class="pull-right">@Model.EmailAddress</span></h4></li>
+        <li class="list-group-item">
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <a class="panel-title" data-toggle="collapse" href="#projects" title="Click to View Projects"><strong>Projects</strong></a>
+                        </h3>
+                    </div>
+                    <div id="projects" class="panel-collapse collapse">
+                        <ul class="list-group">
+                            @{
+                                foreach (var project in Model.Projects)
+                                {
+                                <li class="list-group-item">@project.Title</li>
+                                }
+                                if (Model.Projects.Count < 1)
+                                {
+                                    <li class="list-group-item">No projects exists for @Model.Name</li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
 </div>
-<p>
+<div class="form-group">
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
-</p>
+</div>

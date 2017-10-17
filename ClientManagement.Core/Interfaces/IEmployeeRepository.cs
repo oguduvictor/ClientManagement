@@ -9,7 +9,7 @@ namespace ClientManagement.Core.Interfaces
     {
         Task Create(Employee employee);
         Task<Employee> GetEmployee(Guid id);
-        Task<IEnumerable<Employee>> GetAllEmployees();
+        Task<List<Employee>> GetAllEmployees(bool isSummary = false);
         Task Update(Employee employee);
         Task AssignProjectToEmployee(Guid employeeId, Guid projectId);
         Task Delete(Guid id);

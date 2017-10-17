@@ -14,6 +14,7 @@ namespace ClientManagement.Tests.Services
     public class EmployeeServiceTest
     {
         private Mock<IEmployeeRepository> _employeeRepoMock;
+        private Mock<IProjectRepository> _projectRepoMock;
         private EmployeeService _employeeService;
 
         [TestInitialize]
@@ -21,8 +22,9 @@ namespace ClientManagement.Tests.Services
         {
             var employees = Data.Employees;
 
+            _projectRepoMock = new Mock<IProjectRepository>();
             _employeeRepoMock = new Mock<IEmployeeRepository>();
-            _employeeRepoMock.Setup(x => x.GetAllEmployees()).ReturnsAsync(employees);
+            _employeeRepoMock.Setup(x => x.GetAllEmployees(false)).ReturnsAsync(employees);
             _employeeRepoMock
                 .Setup(x => x.GetEmployee(It.IsAny<Guid>()))
                 .ReturnsAsync((Guid input) =>
@@ -31,7 +33,7 @@ namespace ClientManagement.Tests.Services
                 });
             _employeeRepoMock.Setup(x => x.Create(It.IsAny<Employee>()));
             _employeeRepoMock.Setup(x => x.Update(It.IsAny<Employee>()));
-            _employeeService = new EmployeeService(_employeeRepoMock.Object);
+            _employeeService = new EmployeeService(_employeeRepoMock.Object, _projectRepoMock.Object);
         }
 
         [TestMethod, TestCategory("Unit Test")]

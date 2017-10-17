@@ -4,6 +4,7 @@ using ClientManagement.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ClientManagement.Core.Data.Repositories
@@ -27,9 +28,23 @@ namespace ClientManagement.Core.Data.Repositories
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
         }
-        public async Task<IEnumerable<Project>> GetAllProjects()
+        public Task<List<Project>> GetAllProjects(bool isSummary = false)
         {
-            return await _context.Projects.Include(x => x.Client).ToListAsync();
+
+            var query = _context.Projects.AsQueryable();
+
+            if (isSummary)
+            {
+                return query.Select(x => new { x.Id, x.Title })
+                    .ToListAsync()
+                    .ContinueWith(items => items.Result.Select(x => new Project
+                    {
+                        Id = x.Id,
+                        Title = x.Title
+                    }).ToList());
+            }
+
+            return query.ToListAsync();
         }
         public async Task<Project> GetProject(Guid id)
         {

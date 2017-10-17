@@ -20,7 +20,7 @@ namespace ClientManagement.Tests.Services
         {
             var projects = Data.Projects;
             _projectRepoMock = new Mock<IProjectRepository>();
-            _projectRepoMock.Setup(x => x.GetAllProjects()).ReturnsAsync(projects);
+            _projectRepoMock.Setup(x => x.GetAllProjects(true)).ReturnsAsync(projects);
             _projectRepoMock.Setup(x => x.GetProject(It.IsAny<Guid>()))
                 .ReturnsAsync((Guid input) => 
                 {

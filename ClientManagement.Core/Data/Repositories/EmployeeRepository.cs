@@ -27,9 +27,26 @@ namespace ClientManagement.Core.Data.Repositories
             _dbContext.Employees.Add(employee);
             await _dbContext.SaveChangesAsync();
         }
-        public async Task<IEnumerable<Employee>> GetAllEmployees()
+        public Task<List<Employee>> GetAllEmployees(bool isSummary = false)
         {
-            return await _dbContext.Employees.Include(x => x.Projects).ToListAsync();
+            var query = _dbContext.Employees.AsQueryable();
+
+            if (isSummary)
+            {
+                return query.Select(x => new { x.Id, x.FirstName, x.LastName })
+                    .ToListAsync()
+                    .ContinueWith(items =>
+                    {
+                        return items.Result.Select(x => new Employee
+                        {
+                            Id = x.Id,
+                            FirstName = x.FirstName,
+                            LastName = x.LastName
+                        }).ToList();
+                    });
+               
+            }
+            return _dbContext.Employees.Include(x => x.Projects).ToListAsync();
         }
         public async Task<Employee> GetEmployee(Guid employeeId)
         {

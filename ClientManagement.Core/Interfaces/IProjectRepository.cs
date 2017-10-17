@@ -9,7 +9,7 @@ namespace ClientManagement.Core.Interfaces
     {
         Task Create(Project project);
         Task<Project> GetProject(Guid id);
-        Task<IEnumerable<Project>> GetAllProjects();
+        Task<List<Project>> GetAllProjects(bool includeClient = false);
         Task Update(Project project);
         Task Delete(Guid id);
     }

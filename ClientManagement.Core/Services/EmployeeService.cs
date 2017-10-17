@@ -1,5 +1,6 @@
 ﻿using ClientManagement.Core.Interfaces;
 using ClientManagement.Core.Models;
+using ClientManagement.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +11,21 @@ namespace ClientManagement.Core.Services
     public class EmployeeService: IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IProjectRepository _projectRepository;
         
-        public EmployeeService(IEmployeeRepository employeeRepository)
+        public EmployeeService(IEmployeeRepository employeeRepository, IProjectRepository projectRepository)
         {
             _employeeRepository = employeeRepository;
+            _projectRepository = projectRepository;
         }
         public async Task<Employee> GetEmployee(Guid employeeId)
         {
             return await _employeeRepository.GetEmployee(employeeId);
         }
-        public async Task<IEnumerable<Employee>> GetAllEmployees()
+
+        public async Task<IEnumerable<Employee>> GetAllEmployees(bool isSummary = false)
         {
-            return await _employeeRepository.GetAllEmployees();
+            return await _employeeRepository.GetAllEmployees(isSummary);
         }
         public async Task Save(Employee employee)
         {
@@ -31,6 +35,20 @@ namespace ClientManagement.Core.Services
             else
                 await _employeeRepository.Update(employee);
         }
+
+        public async Task<AssignProjectViewModel> GetProjectAssignmentView(Guid employeeId)
+        {
+            var dbEmployee = await _employeeRepository.GetEmployee(employeeId);
+            var projects = await _projectRepository.GetAllProjects();
+
+            return new AssignProjectViewModel
+            {
+                Employee = dbEmployee.FullName,
+                EmployeeId = dbEmployee.Id,
+                ProjectIds = projects.Select(x => new KeyValuePair<bool, Guid>())
+            };
+        }
+
         public async Task<IEnumerable<Project>> GetProjectListForEmployee(Guid employeeId)
         {
             var employee = await _employeeRepository.GetEmployee(employeeId);

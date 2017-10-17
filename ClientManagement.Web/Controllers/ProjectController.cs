@@ -51,7 +51,7 @@ namespace ClientManagement.Web.Controllers
         public async Task<ActionResult> ProjectEmployees(Guid id)
         {
             var project = await _projectService.GetProject(id);
-            var projectEmployees = _projectService.GetEmployeeListForProject(id);
+            var projectEmployees = await _projectService.GetEmployeeListForProject(id);
             ViewBag.Project = project.Title;
             return View(projectEmployees);
         }
@@ -66,15 +66,19 @@ namespace ClientManagement.Web.Controllers
         // POST: Project/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Title,Description,ClientId,ProjectStatus")] Project project)
+        public async Task<ActionResult> Create(Project project)
         {
             if (ModelState.IsValid)
             {
                 project.Id = Guid.NewGuid();
+
                 await _projectService.Save(project);
+
                 return RedirectToAction("Index");
             }
+
             ViewBag.ClientId = new SelectList(await _clientService.GetAllClients(), "Id", "Name", project.ClientId);
+
             return View(project);
         }
 

@@ -61,7 +61,6 @@ namespace ClientManagement.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                client.Id = Guid.NewGuid();
                 await _clientService.SaveClient(client);
                 return RedirectToAction("Index");
             }
@@ -120,6 +119,5 @@ namespace ClientManagement.Web.Controllers
             await _clientService.Delete(id);
             return RedirectToAction("Index");
         }
-
     }
 }

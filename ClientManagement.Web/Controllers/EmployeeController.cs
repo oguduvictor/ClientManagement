@@ -15,7 +15,7 @@ namespace ClientManagement.Web.Controllers
     {
         private readonly IEmployeeService _employeeService;
         private readonly IProjectService _projectService;
-        private Employee employee;
+
         public EmployeeController(IEmployeeService employeeService, IProjectService projectService)
         {
             _employeeService = employeeService;
@@ -37,13 +37,11 @@ namespace ClientManagement.Web.Controllers
         // GET: Employee/Details/5
         public async Task<ActionResult> Details(Guid id)
         {
-            if (id == null)
-            {
-                employee = await _employeeService.GetEmployee(id);
-            }
+            var employee = await _employeeService.GetEmployee(id);
+
             if (employee == null)
             {
-                return RedirectToAction("Create", "Employee");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Employee does not exist for given id");
             }
 
             return View(employee);
@@ -58,7 +56,8 @@ namespace ClientManagement.Web.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            employee = await _employeeService.GetEmployee(id);
+            var employee = await _employeeService.GetEmployee(id);
+
             if (employee == null)
             {
                 throw new Exception("Employee does not Exist!");
@@ -94,7 +93,8 @@ namespace ClientManagement.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            employee = await _employeeService.GetEmployee(id);
+
+            var employee = await _employeeService.GetEmployee(id);
             if (employee == null)
             {
                 throw new Exception("Employee does not Exist!");
@@ -122,7 +122,8 @@ namespace ClientManagement.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            employee = await _employeeService.GetEmployee(id);
+
+            var employee = await _employeeService.GetEmployee(id);
             if (employee == null)
             {
                 return HttpNotFound();
@@ -148,7 +149,7 @@ namespace ClientManagement.Web.Controllers
 
         public async Task<ActionResult> EmployeeProjects(Guid id)
         {
-            employee = await _employeeService.GetEmployee(id);
+            var employee = await _employeeService.GetEmployee(id);
             if (employee == null)
             {
                 throw new Exception("Employee does not Exist!");

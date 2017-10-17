@@ -8,7 +8,7 @@ namespace ClientManagement.Core.Interfaces
     public interface IProjectService
     {
         Task<Project> GetProject(Guid id);
-        Task<IEnumerable<Project>> GetAllProjects();
+        Task<List<Project>> GetAllProjects(bool isSummary = false);
         Task<IEnumerable<Employee>> GetEmployeeListForProject(Guid ProjectId);
         Task Save(Project project);
         Task Delete(Guid id);

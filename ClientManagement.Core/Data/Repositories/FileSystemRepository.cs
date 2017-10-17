@@ -27,10 +27,10 @@ namespace ClientManagement.Core.Data.Repositories
             await PersistEmployees();
         }
 
-        public Task<IEnumerable<Employee>> GetAllEmployees()
+        public Task<List<Employee>> GetAllEmployees(bool isSummary = false)
         {
             if (_employees != null)
-                return Task.FromResult(_employees);
+                return Task.FromResult(_employees.ToList());
 
             _readerWriterLock.EnterReadLock();
 
@@ -48,7 +48,7 @@ namespace ClientManagement.Core.Data.Repositories
             _employees = DeserializeObject<List<Employee>>(employeesJson)
                             ?? new List<Employee>();
 
-            return Task.FromResult(_employees);
+            return Task.FromResult(_employees.ToList());
         }
 
         public async Task<Employee> GetEmployee(Guid id)

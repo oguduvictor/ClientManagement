@@ -32,7 +32,10 @@ namespace ClientManagement.Core.Services
         {
             var dbClient = await GetClient(client.Id);
             if (dbClient == null)
+            {
+                client.Id = Guid.NewGuid();
                 await _clientRepository.Create(client);
+            }
             else
                 await _clientRepository.Update(client);
         }

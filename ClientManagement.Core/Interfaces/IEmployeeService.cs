@@ -8,7 +8,7 @@ namespace ClientManagement.Core.Interfaces
     public interface IEmployeeService
     {
         Task<Employee> GetEmployee(Guid employeeId);
-        Task<IEnumerable<Employee>> GetAllEmployees();
+        Task<IEnumerable<Employee>> GetAllEmployees(bool isSummary = false);
         Task Save(Employee employee);
         Task<IEnumerable<Project>> GetProjectListForEmployee(Guid employeeId);
         Task Delete(Guid id);

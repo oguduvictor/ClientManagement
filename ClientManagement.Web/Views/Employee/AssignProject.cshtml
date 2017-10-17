@@ -1,33 +1,27 @@
-﻿@model ClientManagement.Web.Models.EmployeeProject
+﻿@using ClientManagement.Web.Helpers
+@model ClientManagement.Core.ViewModels.AssignProjectViewModel
 @{
     ViewBag.Title = "Assign Project";
 }
-<div class="row">
-    <h2 class="text-center">Assign Project To @ViewBag.Employee.FirstName @ViewBag.Employee.LastName</h2>
+<div class="container">
+    <h2>Assign Project To @ViewBag.Employee.FirstName @ViewBag.Employee.LastName</h2>
+    <hr />
 
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        <div class="form-horizontal col-md-6 col-md-offset-3">
-            <hr />
+        <div class="row">
             <div class="form-group">
-                @Html.Label("Project Title", htmlAttributes: new { @class = "control-label col-md-2" })
-                @Html.DropDownList("ProjectId", null, htmlAttributes: new { @class = "control-label col-md-8" })
+                <input type="text" name="EmployeeId" value="@ViewBag.employee.Id" hidden />
+                @Html.Label("Project Title", htmlAttributes: new { @class = "control-label" })
+                @Html.DropDownList("ProjectId", ViewHelper.GetProjectsList(), htmlAttributes: new { @class = "form-control col-md-8"})
                 @Html.ValidationMessageFor(model => model.ProjectId, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        <input type="text" name="EmployeeId" value="@ViewBag.employee.Id" hidden />
-
+        
         <div class="form-group">
-            <div class="col-md-offset-4 col-md-8">
-                <input type="submit" value="Add" class="btn btn-success btn-block" />
-            </div>
+            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+            <input type="submit" value="Save" class="btn btn-primary" />
         </div>
-        <hr />
     }
-</div>
-
-<div>
-    @Html.ActionLink("Back to Employees List", "Index")
 </div>

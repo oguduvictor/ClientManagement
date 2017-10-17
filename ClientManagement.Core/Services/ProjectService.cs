@@ -2,7 +2,6 @@
 using ClientManagement.Core.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ClientManagement.Core.Services
@@ -18,9 +17,10 @@ namespace ClientManagement.Core.Services
         {
             return await _projectRepository.GetProject(id);
         }
-        public async Task<IEnumerable<Project>> GetAllProjects()
+        
+        public Task<List<Project>> GetAllProjects(bool isSummary = false)
         {
-            return await _projectRepository.GetAllProjects();
+            return _projectRepository.GetAllProjects(isSummary);
         }
         public async Task<IEnumerable<Employee>> GetEmployeeListForProject(Guid ProjectId)
         {

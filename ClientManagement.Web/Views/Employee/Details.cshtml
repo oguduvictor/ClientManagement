@@ -2,43 +2,46 @@
 
 
 <h2>
-    Details of @ViewBag.Employee
+    Details of @Model.FullName
 </h2>
 
 <hr />
 
-<div>
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Gender)
-        </dd>
-
-    </dl>
+<div class="row">
+    <ul class="list-group">
+        <li class="list-group-item"><h4>First Name: <span>@Model.FirstName</span></h4></li>
+        <li class="list-group-item"><h4>Last Name: <span>@Model.LastName</span></h4></li>
+        <li class="list-group-item"><h4>Gender: <span>@Model.Gender</span></h4></li>
+        <li class="list-group-item">
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <a class="panel-title" data-toggle="collapse" href="#projects" title="Click to View Projects"><strong>Projects</strong></a>
+                        </h3>
+                    </div>
+                    <div id="projects" class="panel-collapse collapse">
+                        <ul class="list-group">
+                            @{
+                                foreach (var project in Model.Projects)
+                                {
+                                    <li class="list-group-item">@project.Title</li>
+                                }
+                                if (Model.Projects.Count < 1)
+                                {
+                                    <li class="list-group-item">@Model.FullName has not been assigned to a project</li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
 </div>
-<p>
+
+<div class="form-group">
     @Html.ActionLink("Edit Employee Details", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("View Projects Assigned", "EmployeeProjects", new { id = Model.Id })
-</p>
-<div>
+    @Html.ActionLink("View Projects Assigned", "EmployeeProjects", new { id = Model.Id }) |
     @Html.ActionLink("Back", "Index")
 </div>

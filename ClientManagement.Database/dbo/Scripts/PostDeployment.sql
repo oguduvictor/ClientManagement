@@ -36,7 +36,7 @@ GO
 INSERT INTO Gender(Id, Name)
 VALUES
 	(10, 'Male'),
-	(20, 'Gender')
+	(20, 'Female')
 
 GO
 INSERT INTO AspNetRoles(Id, Name)
